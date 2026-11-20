@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension-point id="resourceContributor" name="%extension-point.resource.contributor.name" schema="schema/resourceContributor.exsd"/>
+   <extension-point id="metamodelContributor" name="%extension-point.metamodel.contributor.name" schema="schema/metamodelContributor.exsd"/>
+   <extension-point id="storageFinder" name="%extension-point.storage.finder.name" schema="schema/storageFinder.exsd"/>
+   <extension-point id="markerFactory" name="%extension-point.marker.factory.name" schema="schema/markerFactory.exsd"/>
+   
+   <extension
+         id="xtendXPandNature"
+         name="%nature.name"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="org.eclipse.xtend.shared.ui.core.builder.XtendXpandNature">
+         </run>
+      </runtime>
+      <builder id="org.eclipse.xtend.shared.ui.xtendBuilder"/> 
+   </extension>
+   
+   <extension
+         id="xtendBuilder"
+         name="%builder.name"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run class="org.eclipse.xtend.shared.ui.core.builder.XtendXpandBuilder"/>
+      </builder>
+   </extension>
+   
+   <extension
+         id="problem"
+         name="%marker.name"
+         point="org.eclipse.core.resources.markers">
+      <super type="org.eclipse.core.resources.problemmarker"/>
+      <super type="org.eclipse.core.resources.textmarker"/>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.eclipse.xtend.shared.ui.core.internal.preferences.XpandMainPreferencePage"
+            id="org.eclipse.xtend.shared.ui.properties.XpandMainPreferencePage"
+            name="%preference.page.main.name">
+      </page>
+      <page
+            category="org.eclipse.xtend.shared.ui.properties.XpandMainPreferencePage"
+            class="org.eclipse.xtend.shared.ui.core.properties.MetamodelContributorsPropertyAndPreferencePage"
+            id="org.eclipse.xtend.shared.ui.properties.MetamodelContributorsPropertyPage"
+            name="%preference.page.metamodel.contributors.name">
+      </page>
+      <page
+            category="org.eclipse.xtend.shared.ui.properties.XpandMainPreferencePage"
+            class="org.eclipse.xtend.shared.ui.editor.preferences.UiPreferencePage"
+            id="org.eclipse.xtend.shared.ui.properties.EditorConfigurationPage"
+            name="%preference.page.ui.preferences">
+      </page>
+      <page
+            category="org.eclipse.xtend.shared.ui.properties.XpandMainPreferencePage"
+            class="org.eclipse.xtend.shared.ui.core.internal.preferences.BuilderPreferencePage"
+            id="org.eclipse.xtend.shared.ui.properties.BuilderPreferencePage"
+            name="%preference.page.builder.name">
+      </page>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="org.eclipse.xtend.shared.ui.core.internal.preferences.XpandMainPreferencePage"
+            id="org.eclipse.xtend.shared.ui.properties.XpandMainPreferencePage"
+            name="%preference.page.main.name">
+            <enabledWhen>
+                <or>
+                    <adapt type="org.eclipse.core.resources.IProject"/>
+                    <adapt type="org.eclipse.jdt.core.IJavaProject"/>
+                </or>
+            </enabledWhen>
+            <filter
+                name="nature"
+                value="org.eclipse.xtend.shared.ui.xtendXPandNature"/>
+      </page>
+      <page
+            category="org.eclipse.xtend.shared.ui.properties.XpandMainPreferencePage"
+            class="org.eclipse.xtend.shared.ui.core.properties.MetamodelContributorsPropertyAndPreferencePage"
+            id="org.eclipse.xtend.shared.ui.properties.MetamodelContributorsPropertyPage"
+            name="%preference.page.metamodel.contributors.name">
+            <enabledWhen>
+                <or>
+                    <adapt type="org.eclipse.core.resources.IProject"/>
+                    <adapt type="org.eclipse.jdt.core.IJavaProject"/>
+                </or>
+            </enabledWhen>
+            <filter
+                name="nature"
+                value="org.eclipse.xtend.shared.ui.xtendXPandNature"/>
+      </page>
+      <page
+            category="org.eclipse.xtend.shared.ui.properties.XpandMainPreferencePage"
+            class="org.eclipse.xtend.shared.ui.core.internal.preferences.BuilderPreferencePage"
+            id="org.eclipse.xtend.shared.ui.properties.BuilderPreferencePage"
+            name="%preference.page.builder.name">
+            <enabledWhen>
+                <or>
+                    <adapt type="org.eclipse.core.resources.IProject"/>
+                    <adapt type="org.eclipse.jdt.core.IJavaProject"/>
+                </or>
+            </enabledWhen>
+            <filter
+                name="nature"
+                value="org.eclipse.xtend.shared.ui.xtendXPandNature"/>
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.themes">
+      <themeElementCategory
+            id="org.eclipse.xtend.shared.ui.extXptThemeCategory"
+            label="%themeElementCategory.label"/>
+      <fontDefinition
+          categoryId="org.eclipse.xtend.shared.ui.extXptThemeCategory"
+          defaultsTo="org.eclipse.jdt.ui.editors.textfont"
+          id="org.eclipse.xtend.shared.ui.textFont"
+          isEditable="true"
+          label="%fontDefinition.label"/>
+   </extension>
+   
+   <extension point="org.eclipse.xtend.shared.ui.metamodelContributor">
+      <metamodelContributor          
+         name="JavaBeans Metamodel"
+         class="org.eclipse.xtend.shared.ui.core.metamodel.jdt.javabean.JavaBeanMetamodelContributor"/>
+      <metamodelContributor        
+         name="oAW-Classic Metamodel"
+         class="org.eclipse.xtend.shared.ui.core.metamodel.jdt.oaw.OawClassicMetamodelContributor"/>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="org.eclipse.xtend.shared.ui.core.preferences.PreferenceInitializer"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="org.eclipse.xtend.shared.ui.JavaProjectContribution"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="org.eclipse.xtend.shared.ui.core.action.AddXtendXpandNatureAction"
+               id="org.eclipse.xtend.shared.ui.action.AddXtendXpandNatureAction"
+               label="%action.add.nature.label"
+               menubarPath="org.eclipse.ui.projectConfigure/additions"
+               >
+         </action>
+         <visibility>
+         	<not>
+	            <objectState
+    	              name="nature"
+        	          value="org.eclipse.xtend.shared.ui.xtendXPandNature">
+            	</objectState>
+            </not>
+         </visibility>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="org.eclipse.xtend.shared.ui.XtendXpandProjectContribution"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="org.eclipse.xtend.shared.ui.core.action.RemoveXtendXpandNatureAction"
+               id="org.eclipse.xtend.shared.ui.action.RemoveXtendXpandNatureAction"
+               label="%action.remove.nature.label"
+               menubarPath="org.eclipse.ui.projectConfigure/additions">
+         </action>
+         <visibility>
+               <objectState
+                     name="nature"
+                     value="org.eclipse.xtend.shared.ui.xtendXPandNature">
+               </objectState>
+         </visibility>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            icon="icons/nature_ovr.gif"
+            id="org.eclipse.xtend.shared.ui.decorator"
+            label="%decorator.label"
+            lightweight="true"
+            location="TOP_RIGHT"
+            state="true">
+         <enablement>
+            <and>
+              <objectClass
+                  name="org.eclipse.core.resources.IProject"/>
+              <objectState
+                    name="nature"
+                    value="org.eclipse.xtend.shared.ui.xtendXPandNature">
+              </objectState>
+            </and>
+         </enablement>
+      </decorator>
+   </extension>
+   <extension
+    	id="XtendXpandSearchResultPage"
+        point="org.eclipse.search.searchResultViewPages">
+		<viewPage
+			id="org.eclipse.xtend.shared.ui.editor.SearchResultPage"
+			searchResultClass="org.eclipse.xtend.shared.ui.editor.search.query.XtendXpandSearchResult"
+			class="org.eclipse.xtend.shared.ui.editor.search.view.XtendXpandSearchResultPage">
+		</viewPage>
+   </extension>
+   <extension
+         point="org.eclipse.xtend.shared.ui.storageFinder">
+      <storageFinder
+            class="org.eclipse.xtend.shared.ui.core.internal.JDTStorageFinder">
+      </storageFinder>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.xtend.shared.ui.editor.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.core.resources.IResource"
+            class="org.eclipse.xtend.shared.ui.core.internal.XtendAdapterFactory">
+         <adapter
+               type="org.eclipse.xtend.shared.ui.core.IXtendXpandResource">
+         </adapter>
+         <adapter
+               type="org.eclipse.xtend.shared.ui.core.IXtendXpandProject">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="org.eclipse.xtend.shared.ui.core.IXtendXpandResource"
+            class="org.eclipse.xtend.shared.ui.core.internal.XtendAdapterFactory">
+         <adapter
+               type="org.eclipse.core.resources.IResource">
+         </adapter>
+         <adapter
+               type="org.eclipse.core.resources.IProject">
+         </adapter>
+         <adapter
+               type="org.eclipse.core.resources.IStorage">
+         </adapter>
+         <adapter
+               type="org.eclipse.xtend.shared.ui.core.IXtendXpandProject">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="org.eclipse.xtend.shared.ui.core.IXtendXpandProject"
+            class="org.eclipse.xtend.shared.ui.core.internal.XtendAdapterFactory">
+         <adapter
+               type="org.eclipse.core.resources.IProject">
+         </adapter>
+         <adapter
+               type="org.eclipse.jdt.core.IJavaProject">
+         </adapter>
+      </factory>
+   </extension>
+
+</plugin>

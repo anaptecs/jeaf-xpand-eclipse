@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.xtend.shared.ui.resourceContributor">
+      <resourceContributor class="org.eclipse.xpand.ui.core.internal.builder.XpandResourceParser"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.xpand.ui.editor.XpandEditor"
+            contributorClass="org.eclipse.xpand.ui.editor.actions.XpandEditorContributor"
+            default="true"
+            extensions="xpt"
+            icon="icons/templatefile.gif"
+            id="org.eclipse.xpand.ui.XpandEditor"
+            name="%editor.name"
+            symbolicFontName="org.eclipse.xtend.shared.ui.textFont">
+      </editor>
+   </extension>
+
+<!-- ================================================================================ -->
+<!-- commands                                                                         -->
+<!-- ================================================================================ -->
+   
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="%editor.category.name"
+            description="%category.description"
+            id="org.eclipse.xpand.ui">
+      </category>
+      <command
+            name="%command.LT.name"
+            categoryId="org.eclipse.xpand.ui"
+            description="%command.LT.description"
+            id="org.eclipse.xpand.ui.insertLT"
+            >
+      </command>
+      <command
+            name="%command.RT.name"
+            categoryId="org.eclipse.xpand.ui"
+            description="%command.RT.description"
+            id="org.eclipse.xpand.ui.insertRT"
+            >
+      </command>
+    </extension>
+
+<!-- ================================================================================ -->
+<!-- bindings                                                                         -->
+<!-- ================================================================================ -->
+
+	<extension point="org.eclipse.ui.bindings">
+		<key
+          commandId="org.eclipse.xpand.ui.insertLT"
+          contextId="org.eclipse.xpand.ui.XpandEditorScope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+&lt;">
+		</key>
+		<key
+          commandId="org.eclipse.xpand.ui.insertRT"
+          contextId="org.eclipse.xpand.ui.XpandEditorScope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+&gt;">
+		</key>  
+		  
+		<!-- MacOSX -->
+		<key
+          commandId="org.eclipse.xpand.ui.insertLT"
+          contextId="org.eclipse.xpand.ui.XpandEditorScope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M4+&lt;">
+		</key>
+		<key
+          commandId="org.eclipse.xpand.ui.insertRT"
+          contextId="org.eclipse.xpand.ui.XpandEditorScope"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M4+&gt;">
+		</key>  
+	</extension>
+      
+<!-- ================================================================================ -->
+<!-- wizard                                                                          -->
+<!-- ================================================================================ -->
+      
+	<extension
+	      point = "org.eclipse.ui.newWizards">
+		<category 
+		   id = "org.eclipse.xpand.ui.newWizards"
+		   name="%category.xpand">
+		</category>
+		 <wizard
+         category="org.eclipse.xpand.ui.newWizards"
+         class="org.eclipse.xpand.ui.wizard.NewTemplateFileWizard"
+         icon="icons/templatefile.gif"
+         id="org.eclipse.xpand.ui.wizard.NewTemplateFileWizard"
+         name="%templateWizard.name">
+	       <description>%templateWizard.description</description>
+		   <selection class="org.eclipse.core.resources.IResource"/>
+		</wizard>
+		<wizard
+        category="org.eclipse.xpand.ui.newWizards"
+        class="org.eclipse.xtend.shared.ui.wizards.XtendXpandProjectWizard"
+        icon="icons/genproject.gif"
+        id="org.eclipse.xpand.ui.wizard.NewXpandProjectWizard"
+        name="%projectWizard.name"
+        project="true">
+           <description>%projectWizard.description</description>
+           <selection class="org.eclipse.core.resources.IResource"/>
+        </wizard>
+	</extension>
+  <extension
+        point="org.eclipse.ui.actionSets">
+     <actionSet
+           description="%refactoring.actionSet.description"
+           id="org.eclipse.xpand.ui.refactoring.CodingActionSet"
+           label="%refactoring.actionSet.label"
+           visible="false">
+        <!--<menu
+              id="org.eclipse.xpand.ui.refactoring.menu"
+              label="%refactoring.menu.label"
+              path="edit">
+           <separator
+                 name="codingGroup">
+           </separator>
+        </menu>-->
+        <!--
+		<action
+			definitionId="org.eclipse.xtend.xpand2.extract.define"
+			label="Extract Define..."
+			retarget="true"
+			menubarPath="org.eclipse.xtend.xpand2.refactoring.menu/codingGroup"
+			id="org.eclipse.xtend.xpand2.actions.ExtractDefine">
+		</action>
+		-->
+		<action
+			definitionId="org.eclipse.xpand.ui.refactoring.rename.define"
+			label="%refactoring.rename.define.action.label"
+			retarget="true"
+			id="org.eclipse.xpand.ui.actions.RenameDefine">
+		</action>
+     </actionSet>
+  </extension>
+  <extension
+        point="org.eclipse.ui.commands">
+      <category
+            name="%category.refactoring.commands.name"
+            description="%category.refactoring.commands.description"
+            id="org.eclipse.xpand.ui.refactoring">
+      </category>
+      <command
+            name="%command.refactoring.quickmenu.name"
+            description="%command.refactoring.quickmenu.description"
+            categoryId="org.eclipse.xpand.ui.refactoring"
+            id="org.eclipse.xpand.ui.refactoring.quickMenu">
+      </command>
+     <command
+           categoryId="org.eclipse.xpand.ui.refactoring"
+           description="%command.refactoring.rename.define.description"
+           id="org.eclipse.xpand.ui.refactoring.rename.define"
+           name="%command.refactoring.rename.define.name">
+     </command>      
+  </extension>
+  <extension
+        point="org.eclipse.ui.bindings">
+     <key
+           commandId="org.eclipse.xpand.ui.refactoring.quickMenu"
+           contextId="org.eclipse.xpand.ui.XpandEditorScope"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="M2+M3+T">
+     </key>
+     <key
+           commandId="org.eclipse.xpand.ui.refactoring.rename.define"
+           contextId="org.eclipse.xpand.ui.XpandEditorScope"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="M2+M3+R">
+     </key>
+  </extension>
+  <extension
+        point="org.eclipse.ui.contexts">
+     <context
+           description="%context.description"
+           id="org.eclipse.xpand.ui.XpandEditorScope"
+           name="%context.name"
+           parentId="org.eclipse.ui.textEditorScope">
+     </context>
+  </extension>
+  <extension
+        point="org.eclipse.emf.mwe.ui.debugAdapters">
+     <adapter
+           name="Xpand Debug Adapters"
+           pluginClass="org.eclipse.xpand.ui.debug.XpandPluginAdapter"
+           runtimeClass="org.eclipse.internal.xpand2.debug.XpandElementAdapter">
+     </adapter>
+  </extension>    
+</plugin>

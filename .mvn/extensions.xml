@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extensions>
+	<!-- Tycho POM-less build: plug-ins and features are built from MANIFEST.MF / feature.xml without own pom.xml -->
+	<extension>
+		<groupId>org.eclipse.tycho</groupId>
+		<artifactId>tycho-build</artifactId>
+		<version>4.0.13</version>
+	</extension>
+</extensions>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.anaptecs.jeaf.xpand.eclipse</groupId>
+		<artifactId>jeaf-xpand-eclipse-project</artifactId>
+		<version>2.2.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>jeaf-xpand-eclipse-site</artifactId>
+	<packaging>eclipse-repository</packaging>
+	<name>JEAF Xpand Eclipse Update Site</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-repository-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<!-- Name shown in "Install New Software" -->
+					<repositoryName>JEAF Xpand ${project.version}</repositoryName>
+					<!-- Includes the unchanged Xpand 2.2.0 runtime of the features, but not the Eclipse platform. -->
+					<includeAllDependencies>false</includeAllDependencies>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

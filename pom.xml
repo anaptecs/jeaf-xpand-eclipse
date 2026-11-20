@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.anaptecs.jeaf.xpand.eclipse</groupId>
+	<artifactId>jeaf-xpand-eclipse-project</artifactId>
+	<version>2.2.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>JEAF Xpand Eclipse Project</name>
+	<description>Eclipse editors for Xpand, Xtend and Check, based on Eclipse Xpand 2.2.0.</description>
+	<url>https://github.com/anaptecs/jeaf-xpand-eclipse</url>
+
+	<!-- Code is based on Eclipse Xpand and therefore licensed under Eclipse Public License 1.0. -->
+	<licenses>
+		<license>
+			<name>Eclipse Public License - v 1.0</name>
+			<url>https://www.eclipse.org/legal/epl-v10.html</url>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:https://github.com/anaptecs/jeaf-xpand-eclipse.git</connection>
+		<developerConnection>scm:git:https://github.com/anaptecs/jeaf-xpand-eclipse.git</developerConnection>
+		<url>https://github.com/anaptecs/jeaf-xpand-eclipse</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<modules>
+		<module>plugins/org.eclipse.xtend.shared.ui</module>
+		<module>plugins/org.eclipse.xtend.ui</module>
+		<module>plugins/org.eclipse.xtend.check.ui</module>
+		<module>plugins/org.eclipse.xpand.ui</module>
+		<module>plugins/org.eclipse.xpand.activities</module>
+		<module>plugins/org.eclipse.xtend.typesystem.emf.ui</module>
+		<module>plugins/org.eclipse.xtend.typesystem.uml2.ui</module>
+		<module>features/org.eclipse.xtend-feature</module>
+		<module>features/org.eclipse.xpand-feature</module>
+		<module>features/org.eclipse.xtend.ui-feature</module>
+		<module>features/org.eclipse.xpand.ui-feature</module>
+		<module>features/org.eclipse.xtend.typesystem.emf-feature</module>
+		<module>features/org.eclipse.xtend.typesystem.uml2-feature</module>
+		<module>site</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<tycho.version>4.0.13</tycho.version>
+		<!-- Update site is published on www.jeaf-generator.io and not deployed to a Maven repository. -->
+		<maven.deploy.skip>true</maven.deploy.skip>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<!-- Eclipse release and Xpand 2.2.0 runtime the plug-ins are built against -->
+					<target>
+						<file>${maven.multiModuleProjectDirectory}/jeaf-xpand-eclipse.target</file>
+					</target>
+					<!-- Build with the Java version of BREE JavaSE-17 -->
+					<executionEnvironment>JavaSE-17</executionEnvironment>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<!-- Qualifier like the Eclipse builds, e.g. v202611201200 -->
+					<format>'v'yyyyMMddHHmm</format>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>plugin-source</id>
+						<goals>
+							<goal>plugin-source</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
