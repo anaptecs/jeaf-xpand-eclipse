@@ -30,6 +30,7 @@ Plug-ins and features keep the IDs of Eclipse Xpand, so existing projects and se
 - Features no longer declare required plug-ins, as some of them don't exist anymore under their old names (e.g. `org.apache.commons.logging`). Dependencies are defined by the plug-ins only.
 - Fix of `ConcurrentModificationException` in `XtendXpandProject.analyze(...)`, e.g. when changing metamodel contributors.
 - Features refer to the update site above, so Eclipse knows it for updates.
+- All artifacts of the update site are PGP signed with the JEAF release key.
 
 ## Build
 
@@ -43,9 +44,10 @@ The update site is created in `site/target/repository`. Plug-ins are built with 
 
 The update site is a composite p2 repository in [jeaf-generator.io](https://github.com/anaptecs/jeaf-generator.io) (`distribution/xpand`) with one child repository per version.
 
-1. Increase the version (e.g. `mvn tycho-versions:set-version -DnewVersion=2.4.0-SNAPSHOT`) and build.
-2. Copy `site/target/repository` to `distribution/xpand/<version>`.
+1. Run workflow "Maven Release Build" with the current version without `-SNAPSHOT` (e.g. `2.3.0`) and tag (e.g. `v2.3.0`). It builds the update site with PGP signatures (profile `JEAFRelease`), tags the release and provides the update site as workflow artifact.
+2. Copy the workflow artifact to `distribution/xpand/<version>` (e.g. `gh run download <run-id> -n jeaf-xpand-eclipse-<version> -D distribution/xpand/<version>`).
 3. Add `<child location='<version>'/>` to `compositeContent.xml` and `compositeArtifacts.xml` and increase `size` of `children`.
+4. Increase the version for the next release (e.g. `mvn tycho-versions:set-version -DnewVersion=2.4.0-SNAPSHOT`).
 
 ## License
 
