@@ -50,6 +50,16 @@
 	</properties>
 
 	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Version update of POMs, manifests and features: mvn tycho-versions:set-version -DnewVersion=... -->
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-versions-plugin</artifactId>
+					<version>${tycho.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>

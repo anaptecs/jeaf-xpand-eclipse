@@ -12,6 +12,8 @@
 	<feature id="org.eclipse.xtend.typesystem.uml2">
 		<category name="xpand"/>
 	</feature>
+	<!-- Registered in Eclipse on installation, so that "Check for Updates" finds new versions -->
+	<repository-reference location="https://www.jeaf-generator.io/distribution/xpand" enabled="true"/>
 	<category-def name="xpand" label="JEAF Xpand">
 		<description>Editors for Xpand, Xtend and Check, based on Eclipse Xpand 2.2.0</description>
 	</category-def>
