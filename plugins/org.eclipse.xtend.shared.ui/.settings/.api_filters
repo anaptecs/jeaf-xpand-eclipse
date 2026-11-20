@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="org.eclipse.xtend.shared.ui" version="2">
+    <resource path="META-INF/MANIFEST.MF">
+        <filter comment="Removed exported packages that are not intended for reuse" id="923795461">
+            <message_arguments>
+                <message_argument value="2.1.0"/>
+                <message_argument value="2.0.0"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src/org/eclipse/xtend/shared/ui/core/properties/MetamodelContributorsPropertyAndPreferencePage.java" type="org.eclipse.xtend.shared.ui.core.properties.MetamodelContributorsPropertyAndPreferencePage">
+        <filter id="338792546">
+            <message_arguments>
+                <message_argument value="org.eclipse.xtend.shared.ui.core.properties.MetamodelContributorsPropertyAndPreferencePage"/>
+                <message_argument value="hasProjectSpecificOptions(IProject)"/>
+            </message_arguments>
+        </filter>
+        <filter id="576720909">
+            <message_arguments>
+                <message_argument value="AbstractPreferencePage"/>
+                <message_argument value="MetamodelContributorsPropertyAndPreferencePage"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>
