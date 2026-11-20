@@ -21,18 +21,6 @@
       <update label="%updateSiteName" url="http://download.eclipse.org/modeling/m2t/updates/"/>
    </url>
 
-   <requires>
-      <import plugin="org.eclipse.emf.ecore.xmi"/>
-      <import plugin="org.apache.commons.logging"/>
-      <import plugin="org.eclipse.emf.mwe.core"/>
-      <import plugin="org.eclipse.emf.mwe.utils"/>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.jdt.core"/>
-      <import plugin="org.eclipse.xtend.shared.ui"/>
-      <import plugin="org.eclipse.xtend"/>
-   </requires>
 
    <plugin
          id="org.eclipse.xtend.typesystem.emf"

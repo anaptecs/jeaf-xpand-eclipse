@@ -23,6 +23,8 @@ Plug-ins and features keep the IDs of Eclipse Xpand, so existing projects and se
 - ICU4J is replaced by `java.text`, as it is no longer part of Eclipse.
 - "Show in" of the search view uses the Project Explorer instead of the removed Resource Navigator.
 - Feature `org.eclipse.xtend` contains ANTLR runtime 3.2 instead of feature `org.eclipse.xtend.dependencies` (incl. log4j 1.2).
+- Features no longer declare required plug-ins, as some of them don't exist anymore under their old names (e.g. `org.apache.commons.logging`). Dependencies are defined by the plug-ins only.
+- Fix of `ConcurrentModificationException` in `XtendXpandProject.analyze(...)`, e.g. when changing metamodel contributors.
 
 ## Build
 

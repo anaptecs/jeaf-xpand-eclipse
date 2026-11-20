@@ -25,14 +25,6 @@
          id="org.eclipse.xtend.typesystem.emf"
          version="0.0.0"/>
 
-   <requires>
-      <import plugin="org.eclipse.emf.mwe.core"/>
-      <import plugin="org.apache.commons.logging"/>
-      <import plugin="org.eclipse.emf.common" version="2.2.0" match="compatible"/>
-      <import plugin="org.eclipse.emf.ecore.xmi" version="2.2.0" match="compatible"/>
-      <import plugin="org.eclipse.emf.mwe.utils"/>
-      <import plugin="org.antlr.runtime"/>
-   </requires>
 
    <plugin
          id="org.antlr.runtime"
