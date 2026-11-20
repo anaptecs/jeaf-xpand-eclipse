@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+	<feature id="org.eclipse.xpand.ui">
+		<category name="xpand"/>
+	</feature>
+	<feature id="org.eclipse.xtend.ui">
+		<category name="xpand"/>
+	</feature>
+	<feature id="org.eclipse.xtend.typesystem.emf">
+		<category name="xpand"/>
+	</feature>
+	<feature id="org.eclipse.xtend.typesystem.uml2">
+		<category name="xpand"/>
+	</feature>
+	<category-def name="xpand" label="JEAF Xpand">
+		<description>Editors for Xpand, Xtend and Check, based on Eclipse Xpand 2.2.0</description>
+	</category-def>
+</site>

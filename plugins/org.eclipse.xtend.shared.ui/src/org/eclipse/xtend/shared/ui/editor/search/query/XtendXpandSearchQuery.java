@@ -24,7 +24,7 @@ import org.eclipse.xtend.shared.ui.Messages;
 import org.eclipse.xtend.shared.ui.core.IXtendXpandProject;
 import org.eclipse.xtend.shared.ui.core.search.SearchMatch;
 
-import com.ibm.icu.text.MessageFormat;
+import java.text.MessageFormat;
 
 /**
  * <code>XtendXpandSearchQuery</code> is a base class for search queries. Queries

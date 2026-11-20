@@ -48,7 +48,7 @@ import org.eclipse.ui.part.IShowInTargetList;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.xtend.shared.ui.editor.search.query.XtendXpandSearchQuery;
 
-import com.ibm.icu.text.MessageFormat;
+import java.text.MessageFormat;
 
 /**
  * <code>XtendXpandSearchResultPage </code> displays the search results of an Xtend
@@ -102,7 +102,7 @@ public class XtendXpandSearchResultPage extends AbstractTextSearchViewPage imple
 	private final EditorOpener editorOpener = new EditorOpener();
 
 	@SuppressWarnings("deprecation")
-	private static final String[] SHOW_IN_TARGETS = new String[] { IPageLayout.ID_RES_NAV };
+	private static final String[] SHOW_IN_TARGETS = new String[] { IPageLayout.ID_PROJECT_EXPLORER };
 	private static final IShowInTargetList SHOW_IN_TARGET_LIST = new IShowInTargetList() {
 		public String[] getShowInTargetIds() {
 			return XtendXpandSearchResultPage.SHOW_IN_TARGETS;

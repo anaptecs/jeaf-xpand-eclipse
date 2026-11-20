@@ -216,7 +216,6 @@ public class EclipseHelper {
 		for (String entry : requiredBundles) {
 			mainContent.append(" " + entry + ",\n");
 		}
-		mainContent.append(" com.ibm.icu;bundle-version=\"4.0.1\",\n");
 		mainContent.append(" org.antlr.runtime;bundle-version=\"3.0.0\",\n");
 		mainContent
 				.append(" org.eclipse.core.runtime;bundle-version=\"3.5.0\",\n");
