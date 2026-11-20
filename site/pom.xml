@@ -20,11 +20,48 @@
 				<version>${tycho.version}</version>
 				<configuration>
 					<!-- Name shown in "Install New Software" -->
-					<repositoryName>JEAF Xpand ${project.version}</repositoryName>
+					<repositoryName>JEAF Xpand ${unqualifiedVersion}</repositoryName>
 					<!-- Includes the unchanged Xpand 2.2.0 runtime of the features, but not the Eclipse platform. -->
 					<includeAllDependencies>false</includeAllDependencies>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<!-- Release build: PGP signatures for all artifacts of the update site. Secret key file: -Dtycho.pgp.signer.bc.secretKeys=... -->
+		<profile>
+			<id>JEAFRelease</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-gpg-plugin</artifactId>
+						<version>${tycho.version}</version>
+						<executions>
+							<execution>
+								<id>pgpsigner</id>
+								<goals>
+									<goal>sign-p2-artifacts</goal>
+								</goals>
+								<configuration>
+									<!-- Bouncy Castle instead of native gpg, so no keyring is needed -->
+									<signer>bc</signer>
+									<!-- Passphrase of the secret key -->
+									<passphraseEnvName>MAVEN_GPG_PASSPHRASE</passphraseEnvName>
+									<!-- Also sign the jar-signed Xpand 2.2.0 and ANTLR bundles -->
+									<skipIfJarsignedAndAnchored>false</skipIfJarsignedAndAnchored>
+									<skipIfJarsigned>false</skipIfJarsigned>
+									<!-- Also sign the root files of the features -->
+									<skipBinaries>false</skipBinaries>
+									<!-- Keep existing PGP signatures (e.g. ANTLR from Eclipse) and add ours -->
+									<pgpKeyBehavior>merge</pgpKeyBehavior>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
