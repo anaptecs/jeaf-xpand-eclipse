@@ -7,12 +7,15 @@
 
 package org.eclipse.xtend.shared.ui.core.internal;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -174,9 +177,10 @@ public class XtendXpandProject implements IXtendXpandProject {
 		}
 	}
 
-	private final Map<ResourceID, IXtendXpandResource> resources = new HashMap<ResourceID, IXtendXpandResource>();
+	// Concurrent as resources are loaded while analyzing and from builder / UI jobs at the same time.
+	private final Map<ResourceID, IXtendXpandResource> resources = new ConcurrentHashMap<ResourceID, IXtendXpandResource>();
 
-	private final Set<ResourceID> fromJar = new HashSet<ResourceID>();
+	private final Set<ResourceID> fromJar = ConcurrentHashMap.newKeySet();
 
 	/**
 	 * @see IXtendXpandProject#getRegisteredResources()
@@ -247,7 +251,7 @@ public class XtendXpandProject implements IXtendXpandProject {
 				ResourceID toRemove = null;
 				for (Entry<ResourceID, IXtendXpandResource> entry : resources
 						.entrySet()) {
-					if (entry.getValue() == toRemove) {
+					if (entry.getValue() == res) {
 						toRemove = entry.getKey();
 						break;
 					}
@@ -360,6 +364,9 @@ public class XtendXpandProject implements IXtendXpandProject {
 			// Find out if the storage is already under another key in the cache
 			ResourceID jdtResourceID = JDTUtil.findXtendXpandResourceID(
 					getProject(), storage);
+			if (jdtResourceID == null) {
+				jdtResourceID = resourceID;
+			}
 			IXtendXpandResource result = null;
 
 			// get the file extension and find the appropriate
@@ -446,9 +453,11 @@ public class XtendXpandProject implements IXtendXpandProject {
 	 */
 	public void analyze(final IProgressMonitor monitor,
 			final ExecutionContext ctx) {
-		SubMonitor subMon = SubMonitor.convert(monitor, resources.size());
+		// Snapshot, as analyzing a resource loads further resources into the cache.
+		List<IXtendXpandResource> toAnalyze = new ArrayList<IXtendXpandResource>(resources.values());
+		SubMonitor subMon = SubMonitor.convert(monitor, toAnalyze.size());
 
-		for (IXtendXpandResource resource : resources.values()) {
+		for (IXtendXpandResource resource : toAnalyze) {
 			if (monitor.isCanceled()) {
 				return;
 			}
