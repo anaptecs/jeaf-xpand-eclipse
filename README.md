@@ -4,6 +4,8 @@ Eclipse editors for the template language Xpand, the extension language Xtend an
 
 The code is based on [Eclipse M2T Xpand](https://projects.eclipse.org/projects/modeling.m2t.xpand) 2.2.0 (repository [eclipse/xpand/org.eclipse.xpand](https://gitlab.eclipse.org/eclipse/xpand/org.eclipse.xpand), commit `773b6cadc8c3ff4d6a2356726093b93fb0a4fe2c`), which is not maintained anymore. The editors of Eclipse Xpand 2.2.0 can't be installed in current Eclipse versions.
 
+Update site: `https://www.jeaf-generator.io/distribution/xpand/2.3.0`
+
 ## Content
 
 | Feature | Content |
@@ -18,7 +20,7 @@ Plug-ins and features keep the IDs of Eclipse Xpand, so existing projects and se
 
 ## Differences to Eclipse Xpand 2.2.0
 
-- Version 2.2.1 of the UI plug-ins and of the features. The runtime plug-ins (`org.eclipse.xpand`, `org.eclipse.xtend`, ...) are the unchanged ones of Eclipse Xpand 2.2.0.
+- Version 2.3.0 of the UI plug-ins and of the features. The runtime plug-ins (`org.eclipse.xpand`, `org.eclipse.xtend`, ...) are the unchanged ones of Eclipse Xpand 2.2.0.
 - Requires Java 17 and Eclipse 2024-09 or newer.
 - ICU4J is replaced by `java.text`, as it is no longer part of Eclipse.
 - "Show in" of the search view uses the Project Explorer instead of the removed Resource Navigator.
