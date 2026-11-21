@@ -29,6 +29,7 @@ Plug-ins and features keep the IDs of Eclipse Xpand, so existing projects and se
 - Feature `org.eclipse.xtend` contains ANTLR runtime 3.2 instead of feature `org.eclipse.xtend.dependencies` (incl. log4j 1.2).
 - Features no longer declare required plug-ins, as some of them don't exist anymore under their old names (e.g. `org.apache.commons.logging`). Dependencies are defined by the plug-ins only.
 - Fix of `ConcurrentModificationException` in `XtendXpandProject.analyze(...)`, e.g. when changing metamodel contributors.
+- Default metamodel contributors for templates of JEAF Generator: "UML2 profiles" and "oAW-Classic Metamodel".
 - Features refer to the update site above, so Eclipse knows it for updates.
 - All artifacts of the update site are PGP signed with the JEAF release key.
 
