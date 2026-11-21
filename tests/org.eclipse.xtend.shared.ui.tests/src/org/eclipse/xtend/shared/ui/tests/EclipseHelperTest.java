@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -81,6 +82,10 @@ class EclipseHelperTest {
 		assertTrue(project.getFile("META-INF/MANIFEST.MF").exists());
 		assertTrue(project.getFile("build.properties").exists());
 		assertTrue(JavaCore.create(project).getOutputLocation().equals(project.getFullPath().append("bin")));
+		// PDE is available in this test runtime, so the project is a plug-in project.
+		assertTrue(project.hasNature("org.eclipse.pde.PluginNature"));
+		assertTrue(Arrays.stream(JavaCore.create(project).getRawClasspath())
+				.anyMatch(e -> e.getPath().toString().equals("org.eclipse.pde.core.requiredPlugins")));
 
 		// Progress: one task that isn't exceeded and is finished
 		assertEquals(1, monitor.beginTaskCalls);
