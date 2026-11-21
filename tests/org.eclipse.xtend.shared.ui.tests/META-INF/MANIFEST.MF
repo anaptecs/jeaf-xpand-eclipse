@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Xpand Shared UI Tests
 Bundle-SymbolicName: org.eclipse.xtend.shared.ui.tests
-Bundle-Version: 2.3.2.qualifier
+Bundle-Version: 2.3.3.qualifier
 Bundle-Vendor: anaptecs GmbH
 Fragment-Host: org.eclipse.xtend.shared.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-17

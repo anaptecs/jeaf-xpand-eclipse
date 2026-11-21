@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Xpand Editor Tests
 Bundle-SymbolicName: org.eclipse.xpand.ui.tests
-Bundle-Version: 2.3.2.qualifier
+Bundle-Version: 2.3.3.qualifier
 Bundle-Vendor: anaptecs GmbH
 Fragment-Host: org.eclipse.xpand.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-17
