@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextHover;
+import org.eclipse.jface.text.ITextHoverExtension2;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.source.Annotation;
@@ -28,7 +29,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.texteditor.MarkerAnnotation;
 import org.eclipse.xtend.shared.ui.Messages;
 
-public class XtendXpandProblemHover implements IAnnotationHover, ITextHover {
+public class XtendXpandProblemHover implements IAnnotationHover, ITextHover, ITextHoverExtension2 {
 
 	private final ISourceViewer sourceViewer;
 
@@ -42,7 +43,12 @@ public class XtendXpandProblemHover implements IAnnotationHover, ITextHover {
 	}
 
 	// for TextHover
+	@Deprecated
 	public String getHoverInfo(final ITextViewer textViewer, final IRegion hoverRegion) {
+		return getHoverInfo2(textViewer, hoverRegion);
+	}
+
+	public String getHoverInfo2(final ITextViewer textViewer, final IRegion hoverRegion) {
 		int lineNumber;
 		try {
 			lineNumber = sourceViewer.getDocument().getLineOfOffset(hoverRegion.getOffset());

@@ -14,7 +14,6 @@ package org.eclipse.xpand.ui;
 import java.io.IOException;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.text.templates.ContextTypeRegistry;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -104,7 +103,7 @@ public class XpandEditorPlugin extends AbstractUIPlugin {
 		return templateStore;
 	}
 
-	public ContextTypeRegistry getContextTypeRegistry() {
+	public ContributionContextTypeRegistry getContextTypeRegistry() {
 		if (contextTypeRegistry == null) {
 			contextTypeRegistry = new ContributionContextTypeRegistry();
 			contextTypeRegistry.addContextType("org.eclipse.xpand.ui.editor.context.Default");

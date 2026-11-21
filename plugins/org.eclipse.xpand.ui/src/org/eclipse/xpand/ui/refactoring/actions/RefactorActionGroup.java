@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.PerformanceStats;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -28,9 +29,10 @@ import org.eclipse.swt.events.MenuAdapter;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IKeyBindingService;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.ActionGroup;
+import org.eclipse.ui.handlers.IHandlerActivation;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.xpand.ui.Messages;
 import org.eclipse.xpand.ui.editor.IXpandEditorActionDefinitionIds;
 import org.eclipse.xpand.ui.editor.XpandEditor;
@@ -96,7 +98,8 @@ public class RefactorActionGroup extends ActionGroup {
 
 	private final List<SelectionDispatchAction> fActions = new ArrayList<SelectionDispatchAction>();
 
-	private static final String QUICK_MENU_ID = "org.eclipse.internal.xtend.xpand2.editor.refactoring.quickMenu"; //$NON-NLS-1$
+	// Command with key binding Alt+Shift+T (see plugin.xml)
+	private static final String QUICK_MENU_ID = "org.eclipse.xpand.ui.refactoring.quickMenu"; //$NON-NLS-1$
 
 	private class RefactorQuickAccessAction extends QuickMenuAction {
 		public RefactorQuickAccessAction() {
@@ -110,7 +113,9 @@ public class RefactorActionGroup extends ActionGroup {
 	}
 
 	private final RefactorQuickAccessAction quickAccessAction;
-	private final IKeyBindingService keyBindingService;
+	private final IHandlerService handlerService;
+
+	private final IHandlerActivation quickAccessActivation;
 
 	private static class NoActionAvailable extends Action {
 		public NoActionAvailable() {
@@ -156,8 +161,9 @@ public class RefactorActionGroup extends ActionGroup {
 		editor.setAction("RenameDefine", renameDefineAction); //$NON-NLS-1$
 
 		quickAccessAction = new RefactorQuickAccessAction();
-		keyBindingService = editor.getEditorSite().getKeyBindingService();
-		keyBindingService.registerAction(quickAccessAction);
+		handlerService = editor.getEditorSite().getService(IHandlerService.class);
+		quickAccessActivation = handlerService.activateHandler(quickAccessAction.getActionDefinitionId(),
+				new ActionHandler(quickAccessAction));
 	}
 
 	/**
@@ -208,8 +214,8 @@ public class RefactorActionGroup extends ActionGroup {
 		ISelectionProvider provider = fSite.getSelectionProvider();
 		disposeAction(renameDefineAction, provider);
 // disposeAction(extractDefineAction, provider);
-		if (quickAccessAction != null && keyBindingService != null) {
-			keyBindingService.unregisterAction(quickAccessAction);
+		if (quickAccessActivation != null && handlerService != null) {
+			handlerService.deactivateHandler(quickAccessActivation);
 		}
 		super.dispose();
 	}

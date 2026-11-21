@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.xtend.shared.ui.core.internal;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -25,7 +26,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.debug.core.sourcelookup.containers.ZipEntryStorage;
 import org.eclipse.internal.xtend.expression.parser.SyntaxConstants;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -92,16 +92,14 @@ public class JDTUtil {
 	public static IStorage loadFromJar(final ResourceID id,
 			final IPackageFragmentRoot root) throws JavaModelException {
 		if (root.isArchive()) {
-			ZipFile zipFile;
-			try {
-				zipFile = openArchive(root);
-			} catch (CoreException e) {
+			// The archive is only opened to check the entry. The storage opens it again to read the content.
+			try (ZipFile zipFile = openArchive(root)) {
+				ZipEntry entry = zipFile.getEntry(id.toFileName());
+				if (entry != null) {
+					return new ArchiveEntryStorage(new File(zipFile.getName()), entry.getName());
+				}
+			} catch (CoreException | IOException e) {
 				XtendLog.logError(e);
-				return null;
-			}
-			ZipEntry entry = zipFile.getEntry(id.toFileName());
-			if (entry != null) {
-				return new ZipEntryStorage(zipFile, entry);
 			}
 		}
 		return null;
