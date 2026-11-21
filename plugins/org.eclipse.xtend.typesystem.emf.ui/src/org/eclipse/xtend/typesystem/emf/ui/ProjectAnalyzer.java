@@ -41,8 +41,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.internal.core.ExternalPackageFragmentRoot;
-import org.eclipse.jdt.internal.core.JarPackageFragmentRoot;
 import org.eclipse.xtend.shared.ui.Activator;
 import org.eclipse.xtend.shared.ui.MetamodelContributor;
 import org.eclipse.xtend.shared.ui.core.IModelManager;
@@ -64,7 +62,6 @@ import org.eclipse.xtend.typesystem.emf.ui.internal.EmfToolsLog;
  * Reading Ecore files occurs in background Jobs. Each Job uses its own ResourceSet. This avoids concurrency issues.
  * </p>
  */
-@SuppressWarnings("restriction")
 final class ProjectAnalyzer extends Job {
 
   private final IJavaProject project;
@@ -121,8 +118,8 @@ final class ProjectAnalyzer extends Job {
       for (final IPackageFragmentRoot root : javaProject.getPackageFragmentRoots()) {
         if (!root.isArchive()) {
           IResource rootResource = null;
-          if (root instanceof ExternalPackageFragmentRoot) {
-            rootResource = ((ExternalPackageFragmentRoot) root).resource();
+          if (root.isExternal()) {
+            rootResource = JDTUtil.getExternalFolder(root);
           }
           else {
             rootResource = root.getUnderlyingResource();
@@ -149,16 +146,16 @@ final class ProjectAnalyzer extends Job {
         }
         else {
           // skip JRE jars
-          if (((JarPackageFragmentRoot) root).getPath().toString().contains("jre/lib")) { //$NON-NLS-1$
+          if (root.getPath().toString().contains("jre/lib")) { //$NON-NLS-1$
             if (EmfToolsPlugin.trace) {
-              System.out.println(Messages.ProjectAnalyzer_4 + ((JarPackageFragmentRoot) root).getPath().toString());
+              System.out.println(Messages.ProjectAnalyzer_4 + root.getPath().toString());
             }
             continue;
           }
 
           root.open(monitor);
           try {
-            final ZipFile zip = ((JarPackageFragmentRoot) root).getJar();
+            final ZipFile zip = JDTUtil.openArchive(root);
 
             final Enumeration<? extends ZipEntry> entries = zip.entries();
             while (entries.hasMoreElements()) {

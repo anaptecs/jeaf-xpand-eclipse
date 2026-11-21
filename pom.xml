@@ -39,6 +39,7 @@
 		<module>features/org.eclipse.xpand.ui-feature</module>
 		<module>features/org.eclipse.xtend.typesystem.emf-feature</module>
 		<module>features/org.eclipse.xtend.typesystem.uml2-feature</module>
+		<module>tests/org.eclipse.xtend.shared.ui.tests</module>
 		<module>site</module>
 	</modules>
 

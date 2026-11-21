@@ -32,7 +32,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -57,8 +57,8 @@ public class EclipseHelper {
 			final IProgressMonitor progressMonitor, final Shell theShell) {
 		IProject project = null;
 		try {
-			progressMonitor.beginTask("", 10);
-			progressMonitor.subTask(Messages.EclipseHelper_TaskTitle
+			final SubMonitor subMonitor = SubMonitor.convert(progressMonitor, "", 10);
+			subMonitor.subTask(Messages.EclipseHelper_TaskTitle
 					+ projectName);
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			project = workspace.getRoot().getProject(projectName);
@@ -76,8 +76,7 @@ public class EclipseHelper {
 					}
 				});
 				if (result[0]) {
-					project.delete(true, true, new SubProgressMonitor(
-							progressMonitor, 1));
+					project.delete(true, true, subMonitor.newChild(1));
 				} else {
 					return null;
 				}
@@ -87,8 +86,7 @@ public class EclipseHelper {
 			IProjectDescription projectDescription = ResourcesPlugin
 					.getWorkspace().newProjectDescription(projectName);
 			projectDescription.setLocation(null);
-			project.create(projectDescription, new SubProgressMonitor(
-					progressMonitor, 1));
+			project.create(projectDescription, subMonitor.newChild(1));
 			List<IClasspathEntry> classpathEntries = new ArrayList<IClasspathEntry>();
 			if (referencedProjects.size() != 0) {
 				projectDescription.setReferencedProjects(referencedProjects
@@ -125,16 +123,14 @@ public class EclipseHelper {
 			projectDescription.setBuildSpec(new ICommand[] { java, manifest,
 					schema, extxpt });
 
-			project.open(new SubProgressMonitor(progressMonitor, 1));
-			project.setDescription(projectDescription, new SubProgressMonitor(
-					progressMonitor, 1));
+			project.open(subMonitor.newChild(1));
+			project.setDescription(projectDescription, subMonitor.newChild(1));
 
 			Collections.reverse(srcFolders);
 			for (String src : srcFolders) {
 				IFolder srcContainer = project.getFolder(src);
 				if (!srcContainer.exists()) {
-					srcContainer.create(false, true, new SubProgressMonitor(
-							progressMonitor, 1));
+					srcContainer.create(false, true, subMonitor.newChild(1));
 				}
 				IClasspathEntry srcClasspathEntry = JavaCore
 						.newSourceEntry(srcContainer.getFullPath());
@@ -148,13 +144,13 @@ public class EclipseHelper {
 
 			javaProject.setRawClasspath(classpathEntries
 					.toArray(new IClasspathEntry[classpathEntries.size()]),
-					new SubProgressMonitor(progressMonitor, 1));
+					subMonitor.newChild(1));
 
 			javaProject.setOutputLocation(new Path("/" + projectName + "/bin"),
-					new SubProgressMonitor(progressMonitor, 1));
+					subMonitor.newChild(1));
 			createManifest(projectName, requiredBundles, exportedPackages,
-					progressMonitor, project);
-			createBuildProps(progressMonitor, project);
+					subMonitor.newChild(1), project);
+			createBuildProps(subMonitor.newChild(1), project);
 		} catch (Exception exception) {
 			exception.printStackTrace();
 			XtendLog.logError(exception);
@@ -248,9 +244,10 @@ public class EclipseHelper {
 		}
 
 		IFolder metaInf = project.getFolder("META-INF");
+		final SubMonitor subMonitor = SubMonitor.convert(progressMonitor, 2);
 		if (metaInf.exists())
-			metaInf.delete(false, progressMonitor);
-		metaInf.create(false, true, new SubProgressMonitor(progressMonitor, 1));
+			metaInf.delete(false, subMonitor.newChild(1));
+		metaInf.create(false, true, subMonitor.newChild(1));
 		createFile("MANIFEST.MF", metaInf, mainContent.toString(),
 				new NullProgressMonitor());
 	}

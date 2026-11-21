@@ -45,6 +45,9 @@ jobs:
           exit 1
         fi
 
+    - name: Install virtual display
+      run: sudo apt-get update && sudo apt-get install -y xvfb
+
     - name: Build signed update site
       env:
         MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
@@ -52,7 +55,7 @@ jobs:
       run: |
         KEY_FILE="$RUNNER_TEMP/signing-key.asc"
         printf '%s\n' "$MAVEN_GPG_PRIVATE_KEY" > "$KEY_FILE"
-        mvn -Duser.country=DE -Duser.language=de -Duser.timezone=Europe/Berlin -B clean verify -PJEAFRelease -Dtycho.pgp.signer.bc.secretKeys="$KEY_FILE"
+        xvfb-run -a mvn -Duser.country=DE -Duser.language=de -Duser.timezone=Europe/Berlin -B clean verify -PJEAFRelease -Dtycho.pgp.signer.bc.secretKeys="$KEY_FILE"
         rm -f "$KEY_FILE"
 
     - name: Tag release

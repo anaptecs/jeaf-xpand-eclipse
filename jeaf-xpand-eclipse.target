@@ -11,6 +11,8 @@
 			<unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.uml2.sdk.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.emf.mwe.sdk.feature.group" version="0.0.0"/>
+			<!-- Only for tests: the project wizard creates PDE projects -->
+			<unit id="org.eclipse.pde.core" version="0.0.0"/>
 			<!-- Runtime of Xpand 2.2.0 (unchanged). Features of Xpand 2.2.0 can't be used as they contain the UI plug-ins 2.2.0. -->
 			<unit id="org.eclipse.xtend" version="0.0.0"/>
 			<unit id="org.eclipse.xpand" version="0.0.0"/>

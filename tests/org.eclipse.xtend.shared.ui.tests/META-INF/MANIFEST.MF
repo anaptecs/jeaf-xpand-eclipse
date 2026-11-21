@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Xpand Shared UI Tests
+Bundle-SymbolicName: org.eclipse.xtend.shared.ui.tests
+Bundle-Version: 2.3.1.qualifier
+Bundle-Vendor: anaptecs GmbH
+Fragment-Host: org.eclipse.xtend.shared.ui
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Import-Package: org.junit.jupiter.api;version="[5.0.0,6.0.0)"

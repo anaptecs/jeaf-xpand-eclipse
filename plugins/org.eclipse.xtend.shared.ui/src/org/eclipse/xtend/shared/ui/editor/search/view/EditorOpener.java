@@ -20,9 +20,9 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.xtend.shared.ui.Activator;
 
 /**
  * <code>EditorOpener</code> helps opening a file in the associated editor.
@@ -32,7 +32,7 @@ public class EditorOpener {
 	private IEditorPart fEditor;
 
 	public IEditorPart open(final IFile file, final boolean activate) throws PartInitException {
-		final IWorkbenchPage wbPage = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		final IWorkbenchPage wbPage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		if (NewSearchUI.reuseEditor())
 			return showWithReuse(file, wbPage, activate);
 		return showWithoutReuse(file, wbPage, activate);
@@ -50,9 +50,9 @@ public class EditorOpener {
 	}
 
 	private String getEditorID(final IFile file) throws PartInitException {
-		final IEditorDescriptor desc = IDE.getEditorDescriptor(file);
+		final IEditorDescriptor desc = IDE.getEditorDescriptor(file, true, false);
 		if (desc == null)
-			return Activator.getDefault().getWorkbench().getEditorRegistry().findEditor(
+			return PlatformUI.getWorkbench().getEditorRegistry().findEditor(
 					IEditorRegistry.SYSTEM_EXTERNAL_EDITOR_ID).getId();
 		return desc.getId();
 	}

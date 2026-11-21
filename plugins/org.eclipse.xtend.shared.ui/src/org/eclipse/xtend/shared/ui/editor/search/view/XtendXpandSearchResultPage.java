@@ -27,14 +27,12 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
-import org.eclipse.search.internal.ui.text.NewTextSearchActionGroup;
 import org.eclipse.search.ui.IContextMenuConstants;
 import org.eclipse.search.ui.ISearchResultViewPart;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.search.ui.text.AbstractTextSearchResult;
 import org.eclipse.search.ui.text.AbstractTextSearchViewPage;
 import org.eclipse.search.ui.text.Match;
-import org.eclipse.search2.internal.ui.OpenSearchPreferencesAction;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.PartInitException;
@@ -56,7 +54,6 @@ import java.text.MessageFormat;
  *
  * @author Peter Friese
  */
-@SuppressWarnings("restriction")
 public class XtendXpandSearchResultPage extends AbstractTextSearchViewPage implements IAdaptable {
 
 	public static class DecoratorIgnoringViewerSorter extends ViewerComparator {
@@ -172,8 +169,8 @@ public class XtendXpandSearchResultPage extends AbstractTextSearchViewPage imple
 		try {
 			marker = file.createMarker(NewSearchUI.SEARCH_MARKER);
 			HashMap<String, Integer> attributes = new HashMap<String, Integer>(4);
-			attributes.put(IMarker.CHAR_START, new Integer(offset));
-			attributes.put(IMarker.CHAR_END, new Integer(offset + length));
+			attributes.put(IMarker.CHAR_START, Integer.valueOf(offset));
+			attributes.put(IMarker.CHAR_END, Integer.valueOf(offset + length));
 			marker.setAttributes(attributes);
 			IDE.gotoMarker(editor, marker);
 		} catch (CoreException e) {
@@ -211,7 +208,7 @@ public class XtendXpandSearchResultPage extends AbstractTextSearchViewPage imple
 	@Override
 	public void setViewPart(ISearchResultViewPart part) {
 		super.setViewPart(part);
-		actionGroup = new NewTextSearchActionGroup(part);
+		actionGroup = new OpenFileActionGroup(part);
 	}
 
 	@Override
@@ -263,7 +260,7 @@ public class XtendXpandSearchResultPage extends AbstractTextSearchViewPage imple
 				if (itemCount < fileCount) {
 					String format = "{0} (showing {1} of {2} files)";
 					MessageFormat
-							.format(format, new Object[] { label, new Integer(itemCount), new Integer(fileCount) });
+							.format(format, new Object[] { label, Integer.valueOf(itemCount), Integer.valueOf(fileCount) });
 				}
 			}
 		}
