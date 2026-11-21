@@ -46,7 +46,7 @@ mvn clean verify
 
 Tests in `tests/` run in an Eclipse workbench, which opens a window during the build. On Linux without display, use `xvfb-run -a mvn clean verify` (as the GitHub workflows do).
 
-The update site is created in `site/target/repository`. Plug-ins are built with [Tycho](https://github.com/eclipse-tycho/tycho) against Eclipse 2024-09 and the update site of Eclipse Xpand 2.2.0 (see `jeaf-xpand-eclipse.target`).
+The update site is created in `site/target/repository`. Plug-ins are built with [Tycho](https://github.com/eclipse-tycho/tycho) against Eclipse 2024-09. The unchanged runtime of Eclipse Xpand 2.2.0 is taken from our own update site (see `jeaf-xpand-eclipse.target`).
 
 ## Publishing a new version
 
