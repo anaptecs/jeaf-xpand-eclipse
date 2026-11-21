@@ -1,21 +1,37 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+# Builds the main branch. Tests of the editors run in an Eclipse workbench and therefore need a display (Xvfb).
 
 name: Maven Build Main Branch
 
 on:
   workflow_dispatch:
-  
+
   push:
     branches:
       - main
 
 jobs:
   build:
-    uses: anaptecs/jeaf-project-parent/.github/workflows/maven-build-main-template.yml@main
-    secrets: inherit
+    runs-on: ubuntu-24.04-arm
+
+    name: Maven Main Branch Build
+    steps:
+    - uses: actions/checkout@v5
+
+    - name: Cache local Maven repository
+      uses: actions/cache@v5
+      with:
+        path: ~/.m2/repository
+        key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+        restore-keys: maven-${{ runner.os }}-
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v5
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Install virtual display
+      run: sudo apt-get update && sudo apt-get install -y xvfb
+
+    - name: Build with Maven
+      run: xvfb-run -a mvn -Duser.country=DE -Duser.language=de -Duser.timezone="Europe/Berlin" -B clean verify

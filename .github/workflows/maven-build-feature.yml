@@ -1,16 +1,10 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+# Builds feature branches. Tests of the editors run in an Eclipse workbench and therefore need a display (Xvfb).
 
 name: Maven Build Feature Branch
 
 on:
   workflow_dispatch:
-  
+
   push:
     branches:
       - 'feature/**'
@@ -18,4 +12,30 @@ on:
 
 jobs:
   build:
-    uses: anaptecs/jeaf-project-parent/.github/workflows/maven-build-feature-template.yml@main
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      matrix:
+        java: [ '17', '21', '24', '25' ]
+
+    name: Maven Feature Branch Build (Java ${{ matrix.java }})
+    steps:
+    - uses: actions/checkout@v5
+
+    - name: Cache local Maven repository
+      uses: actions/cache@v5
+      with:
+        path: ~/.m2/repository
+        key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+        restore-keys: maven-${{ runner.os }}-
+
+    - name: Set up JDK (Java ${{ matrix.java }})
+      uses: actions/setup-java@v5
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: 'temurin'
+
+    - name: Install virtual display
+      run: sudo apt-get update && sudo apt-get install -y xvfb
+
+    - name: Build with Maven (Java ${{ matrix.java }})
+      run: xvfb-run -a mvn -Duser.country=DE -Duser.language=de -Duser.timezone="Europe/Berlin" -B clean verify
