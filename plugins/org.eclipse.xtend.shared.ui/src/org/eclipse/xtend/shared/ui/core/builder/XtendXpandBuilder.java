@@ -40,7 +40,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.internal.xtend.expression.parser.SyntaxConstants;
@@ -50,7 +49,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.internal.core.JarPackageFragmentRoot;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.xtend.expression.ExecutionContext;
 import org.eclipse.xtend.shared.ui.Activator;
@@ -80,7 +78,6 @@ import com.google.common.base.Splitter;
  * @author bkolb - Initial
  * @author openArchitectureWare Team - Initial contribution and API
  */
-@SuppressWarnings("restriction")
 public class XtendXpandBuilder extends IncrementalProjectBuilder {
 	// --------------------------------------------------------------------------------------------
 	// --------------------------------------------------------------------------------------------
@@ -203,7 +200,7 @@ public class XtendXpandBuilder extends IncrementalProjectBuilder {
 
 	private void updateIncrementalAnalyzerStrategy() {
 		final ScopedPreferenceStore scopedPreferenceStore = new ScopedPreferenceStore(
-				new InstanceScope(), Activator.getId());
+				InstanceScope.INSTANCE, Activator.getId());
 		incrementalAnalyzerStrategy = scopedPreferenceStore
 				.getInt(PreferenceConstants.INCREMENTAL_ANALYZER_STRATEGY);
 	}
@@ -479,14 +476,13 @@ public class XtendXpandBuilder extends IncrementalProjectBuilder {
 			if (root.isArchive())
 				archives.add(root);
 		}
-		IProgressMonitor subMonitor = new SubProgressMonitor(monitor, 1);
-		subMonitor.beginTask("Scanning archives ", archives.size());
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Scanning archives ", archives.size());
 		for (final IPackageFragmentRoot root : archives) {
 			try {
 				String archiveName = root.getCorrespondingResource() != null ? root
 						.getCorrespondingResource().getFullPath().toString()
 						: root.getElementName();
-				final ZipFile zip = ((JarPackageFragmentRoot) root).getJar();
+				final ZipFile zip = JDTUtil.openArchive(root);
 				// avoid scanning of Jars that are known to have no
 				// Xpand resource
 				if (Activator.getDefault().isBlacklistedJar(

@@ -300,7 +300,7 @@ public abstract class QuickMenuAction extends Action {
 		GC gc = null;
 		try {
 			gc = new GC(control);
-			return gc.getFontMetrics().getAverageCharWidth();
+			return (int) gc.getFontMetrics().getAverageCharacterWidth();
 		} finally {
 			if (gc != null) {
 				gc.dispose();

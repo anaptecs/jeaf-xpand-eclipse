@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.xtend.shared.ui.core.internal;
 
+import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -21,19 +22,18 @@ import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.sourcelookup.containers.ZipEntryStorage;
 import org.eclipse.internal.xtend.expression.parser.SyntaxConstants;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.internal.core.ExternalPackageFragmentRoot;
-import org.eclipse.jdt.internal.core.JarPackageFragmentRoot;
+import org.eclipse.xtend.shared.ui.Activator;
 import org.eclipse.xtend.shared.ui.internal.XtendLog;
 
-@SuppressWarnings("restriction")
-// Discouraged access: ExternalPackageFragmentRoot, JarPackageFragmentRoot
 public class JDTUtil {
 	/**
 	 * find the path for the oaw name space and extension
@@ -60,11 +60,10 @@ public class JDTUtil {
 							.getCorrespondingResource();
 					if (correspondingResource instanceof IContainer) {
 						rootFolder = (IContainer) correspondingResource;
-					} else if (root instanceof ExternalPackageFragmentRoot) {
-						IResource resource = ((ExternalPackageFragmentRoot) root)
-								.resource();
-						if (resource instanceof IContainer) {
-							rootFolder = (IContainer) resource;
+					} else if (root.isExternal()) {
+						IContainer externalFolder = getExternalFolder(root);
+						if (externalFolder != null) {
+							rootFolder = externalFolder;
 							IStorage member = (IStorage) rootFolder
 									.findMember(p);
 							if (member != null) {
@@ -92,11 +91,10 @@ public class JDTUtil {
 
 	public static IStorage loadFromJar(final ResourceID id,
 			final IPackageFragmentRoot root) throws JavaModelException {
-		if (root instanceof JarPackageFragmentRoot) {
-			JarPackageFragmentRoot jar = (JarPackageFragmentRoot) root;
+		if (root.isArchive()) {
 			ZipFile zipFile;
 			try {
-				zipFile = jar.getJar();
+				zipFile = openArchive(root);
 			} catch (CoreException e) {
 				XtendLog.logError(e);
 				return null;
@@ -179,4 +177,51 @@ public class JDTUtil {
 		return null;
 	}
 
+	/**
+	 * Opens the archive (e.g. JAR file) of the passed package fragment root. Replaces JDT's internal
+	 * <code>JarPackageFragmentRoot.getJar()</code>, which also opens the archive by its path.
+	 * 
+	 * @param root
+	 *            Package fragment root of an archive. The parameter must not be null.
+	 * @return {@link ZipFile} Opened archive. The method never returns null.
+	 * @throws CoreException
+	 *             if the archive can't be opened.
+	 */
+	public static ZipFile openArchive(final IPackageFragmentRoot root) throws CoreException {
+		// Archives within the workspace have a resource, external archives are identified by their file system path.
+		IResource resource = root.getResource();
+		IPath location = resource != null ? resource.getLocation() : root.getPath();
+		if (location == null) {
+			throw new CoreException(new Status(IStatus.ERROR, Activator.getId(), "Archive not found: " + root.getPath()));
+		}
+		try {
+			return new ZipFile(location.toFile());
+		} catch (IOException e) {
+			throw new CoreException(new Status(IStatus.ERROR, Activator.getId(), "Archive can't be opened: " + location, e));
+		}
+	}
+
+	/**
+	 * Returns the workspace folder of an external class folder. JDT links external class folders into a hidden project
+	 * of the workspace. Replaces JDT's internal <code>ExternalPackageFragmentRoot.resource()</code>.
+	 * 
+	 * @param root
+	 *            Package fragment root. The parameter must not be null.
+	 * @return {@link IContainer} Folder of the external class folder or null if the root is no external class folder or
+	 *         the folder isn't linked into the workspace.
+	 */
+	public static IContainer getExternalFolder(final IPackageFragmentRoot root) {
+		IContainer folder = null;
+		if (root.isExternal() && !root.isArchive()) {
+			IContainer[] containers = ResourcesPlugin.getWorkspace().getRoot()
+					.findContainersForLocationURI(root.getPath().toFile().toURI(), IContainer.INCLUDE_HIDDEN);
+			for (IContainer container : containers) {
+				if (container.exists()) {
+					folder = container;
+					break;
+				}
+			}
+		}
+		return folder;
+	}
 }

@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -98,7 +98,7 @@ public class XtendXpandProjectWizard extends Wizard implements INewWizard,
 		if (xtextNatureAvailable)
 			++ticks;
 
-		monitor.beginTask(
+		final SubMonitor subMonitor = SubMonitor.convert(monitor,
 				Messages.XtendXpandProjectWizard_ProjectCreationMessage + name,
 				ticks);
 
@@ -113,7 +113,7 @@ public class XtendXpandProjectWizard extends Wizard implements INewWizard,
 		refs.add("org.eclipse.xtend.profiler;resolution:=optional");
 		final IProject p = EclipseHelper.createExtXptProject(projectName,
 				srcfolders, Collections.<IProject> emptyList(), refs, null,
-				new SubProgressMonitor(monitor, 3), getShell());
+				subMonitor.newChild(3), getShell());
 
 		if (p == null)
 			return;
@@ -124,7 +124,7 @@ public class XtendXpandProjectWizard extends Wizard implements INewWizard,
 						p,
 						"eclipse.preferences.version=1\nencoding/<project>=ISO-8859-1\n",
 						new NullProgressMonitor());
-		monitor.worked(1);
+		subMonitor.worked(1);
 
 		if (genExample) {
 			EclipseHelper
@@ -133,29 +133,29 @@ public class XtendXpandProjectWizard extends Wizard implements INewWizard,
 							p,
 							"metamodelContributor=org.eclipse.xtend.typesystem.emf.ui.EmfMetamodelContributor\nproject.specific.metamodel=true\n",
 							new NullProgressMonitor());
-			monitor.worked(1);
+			subMonitor.worked(1);
 			EclipseHelper.createFile("src/metamodel/Checks.chk", p,
 					getContents("Checks.chk"), new NullProgressMonitor());
-			monitor.worked(1);
+			subMonitor.worked(1);
 			EclipseHelper.createFile("src/metamodel/Extensions.ext", p,
 					getContents("Extensions.ext"), new NullProgressMonitor());
-			monitor.worked(1);
+			subMonitor.worked(1);
 			EclipseHelper.createFile("src/metamodel/metamodel.ecore", p,
 					getContents("metamodel.ecore"), new NullProgressMonitor());
-			monitor.worked(1);
+			subMonitor.worked(1);
 			EclipseHelper.createFile("src/template/GeneratorExtensions.ext", p,
 					getContents("GeneratorExtensions.ext"),
 					new NullProgressMonitor());
-			monitor.worked(1);
+			subMonitor.worked(1);
 			EclipseHelper.createFile("src/template/Template.xpt", p,
 					getContents("Template.xpt"), new NullProgressMonitor());
-			monitor.worked(1);
+			subMonitor.worked(1);
 			EclipseHelper.createFile(
 					"src/workflow/generator.mwe",
 					p,
 					getContents("generator.mwe").replace("PROJECTNAME",
 							projectName), new NullProgressMonitor());
-			monitor.worked(1);
+			subMonitor.worked(1);
 
 			if (xtextNatureAvailable) {
 				EclipseHelper.createFile(
@@ -163,7 +163,7 @@ public class XtendXpandProjectWizard extends Wizard implements INewWizard,
 						p,
 						getContents("generator.mwe2").replace("PROJECTNAME",
 								projectName), new NullProgressMonitor());
-				monitor.worked(1);
+				subMonitor.worked(1);
 			}
 
 			EclipseHelper.createFile(
@@ -172,17 +172,17 @@ public class XtendXpandProjectWizard extends Wizard implements INewWizard,
 					getContents("generatorWithBackend.mwe").replace(
 							"PROJECTNAME", projectName),
 					new NullProgressMonitor());
-			monitor.worked(1);
+			subMonitor.worked(1);
 			EclipseHelper.createFile(
 					"src/workflow/generatorWithProfiler.mwe",
 					p,
 					getContents("generatorWithProfiler.mwe").replace(
 							"PROJECTNAME", projectName),
 					new NullProgressMonitor());
-			monitor.worked(1);
+			subMonitor.worked(1);
 			EclipseHelper.createFile("src/Model.xmi", p,
 					getContents("Model.xmi"), new NullProgressMonitor());
-			monitor.worked(1);
+			subMonitor.worked(1);
 
 		}
 
@@ -194,10 +194,10 @@ public class XtendXpandProjectWizard extends Wizard implements INewWizard,
 							+ "=true\n"
 							+ PreferenceConstants.METAMODELCONTRIBUTORS + "="
 							+ page.getStoreString(), new NullProgressMonitor());
-			monitor.worked(1);
+			subMonitor.worked(1);
 		}
 
-		monitor.worked(1);
+		subMonitor.worked(1);
 	}
 
 	private String getContents(final String resource) {

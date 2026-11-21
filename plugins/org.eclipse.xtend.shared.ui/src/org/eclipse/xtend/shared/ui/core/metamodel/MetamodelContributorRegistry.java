@@ -72,8 +72,8 @@ public class MetamodelContributorRegistry {
 	public static List<? extends MetamodelContributor> getActiveMetamodelContributors(final IJavaProject project) {
 		if (Activator.getDefault() == null)
 			return Collections.emptyList();
-		final ScopedPreferenceStore scopedPreferenceStore = new ScopedPreferenceStore(new InstanceScope(), Activator.getId());
-		final IScopeContext[] scopes = { new ProjectScope(project.getProject()), new InstanceScope() };
+		final ScopedPreferenceStore scopedPreferenceStore = new ScopedPreferenceStore(InstanceScope.INSTANCE, Activator.getId());
+		final IScopeContext[] scopes = { new ProjectScope(project.getProject()), InstanceScope.INSTANCE };
 		scopedPreferenceStore.setSearchContexts(scopes);
 		fixMetamodelContributorPreferences(scopedPreferenceStore);
 

@@ -113,7 +113,7 @@ public class CheckEditorPlugin extends AbstractUIPlugin {
      * @return
      */
     private static IWorkbenchWindow getActiveWorkbenchWindow() {
-        return getDefault().getWorkbench().getActiveWorkbenchWindow();
+        return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
     }
 
 }
