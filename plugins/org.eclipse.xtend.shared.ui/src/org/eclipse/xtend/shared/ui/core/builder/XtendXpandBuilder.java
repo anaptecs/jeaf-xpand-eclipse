@@ -12,6 +12,7 @@
 package org.eclipse.xtend.shared.ui.core.builder;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -482,45 +483,46 @@ public class XtendXpandBuilder extends IncrementalProjectBuilder {
 				String archiveName = root.getCorrespondingResource() != null ? root
 						.getCorrespondingResource().getFullPath().toString()
 						: root.getElementName();
-				final ZipFile zip = JDTUtil.openArchive(root);
-				// avoid scanning of Jars that are known to have no
-				// Xpand resource
-				if (Activator.getDefault().isBlacklistedJar(
-						new File(zip.getName()).getName())) {
-					continue;
-				}
-				subMonitor.subTask("Scanning archive " + archiveName);
-				boolean addToBlacklist = true; // remember Jars that do not
-				// contain Xpand resources
-				final Enumeration<? extends ZipEntry> entries = zip.entries();
-				while (entries.hasMoreElements()) {
-					final ZipEntry entry = entries.nextElement();
-					if (entry.getSize() == 0) {
-						continue; // skip directories and empty
-						// files
+				try (final ZipFile zip = JDTUtil.openArchive(root)) {
+					// avoid scanning of Jars that are known to have no
+					// Xpand resource
+					if (Activator.getDefault().isBlacklistedJar(
+							new File(zip.getName()).getName())) {
+						continue;
 					}
-					final String name = entry.getName();
-					final int fileExtOffset = name.lastIndexOf('.');
-					final String ext = fileExtOffset > 0 ? name
-							.substring(fileExtOffset + 1) : null;
-					if (extensions.contains(ext)) {
-						final String fqn = name.substring(0, fileExtOffset)
-								.replace("/", SyntaxConstants.NS_DELIM);
-						final ResourceID resourceID = new ResourceID(fqn, ext);
-						final IStorage findStorage = JDTUtil.loadFromJar(
-								resourceID, root);
-						subMonitor.subTask("Scanning archive " + archiveName
-								+ " - Loading resource "
-								+ findStorage.getFullPath());
-						project.findXtendXpandResource(findStorage);
-						addToBlacklist = false;
+					subMonitor.subTask("Scanning archive " + archiveName);
+					boolean addToBlacklist = true; // remember Jars that do not
+					// contain Xpand resources
+					final Enumeration<? extends ZipEntry> entries = zip.entries();
+					while (entries.hasMoreElements()) {
+						final ZipEntry entry = entries.nextElement();
+						if (entry.getSize() == 0) {
+							continue; // skip directories and empty
+							// files
+						}
+						final String name = entry.getName();
+						final int fileExtOffset = name.lastIndexOf('.');
+						final String ext = fileExtOffset > 0 ? name
+								.substring(fileExtOffset + 1) : null;
+						if (extensions.contains(ext)) {
+							final String fqn = name.substring(0, fileExtOffset)
+									.replace("/", SyntaxConstants.NS_DELIM);
+							final ResourceID resourceID = new ResourceID(fqn, ext);
+							final IStorage findStorage = JDTUtil.loadFromJar(
+									resourceID, root);
+							subMonitor.subTask("Scanning archive " + archiveName
+									+ " - Loading resource "
+									+ findStorage.getFullPath());
+							project.findXtendXpandResource(findStorage);
+							addToBlacklist = false;
+						}
+					}
+					if (addToBlacklist) {
+						Activator.getDefault().addToJarBlacklist(
+								new File(zip.getName()).getName());
 					}
 				}
-				if (addToBlacklist) {
-					Activator.getDefault().addToJarBlacklist(
-							new File(zip.getName()).getName());
-				}
-			} catch (CoreException ex) {
+			} catch (CoreException | IOException ex) {
 				XtendLog.logError(ex);
 			}
 		}

@@ -98,10 +98,13 @@ public class EclipseHelper {
 				}
 			}
 
-			// Set Natures
+			// Set Natures. Plug-in project only if PDE is installed (not part of e.g. "Eclipse IDE for Java Developers").
+			boolean pdeAvailable = Platform.getBundle("org.eclipse.pde.core") != null;
 			List<String> natures = new ArrayList<String>(3);
 			natures.add(JavaCore.NATURE_ID);
-			natures.add("org.eclipse.pde.PluginNature");
+			if (pdeAvailable) {
+				natures.add("org.eclipse.pde.PluginNature");
+			}
 			natures.add(XtendXpandNature.NATURE_ID);
 			if (Platform.getBundle("org.eclipse.xtext.ui.shared") != null) {
 				natures.add("org.eclipse.xtext.ui.shared.xtextNature");
@@ -120,8 +123,8 @@ public class EclipseHelper {
 			ICommand extxpt = projectDescription.newCommand();
 			extxpt.setBuilderName(XtendXpandBuilder.getBUILDER_ID());
 
-			projectDescription.setBuildSpec(new ICommand[] { java, manifest,
-					schema, extxpt });
+			projectDescription.setBuildSpec(pdeAvailable ? new ICommand[] { java, manifest, schema, extxpt }
+					: new ICommand[] { java, extxpt });
 
 			project.open(subMonitor.newChild(1));
 			project.setDescription(projectDescription, subMonitor.newChild(1));
@@ -139,8 +142,10 @@ public class EclipseHelper {
 
 			classpathEntries.add(JavaCore.newContainerEntry(new Path(
 					"org.eclipse.jdt.launching.JRE_CONTAINER")));
-			classpathEntries.add(JavaCore.newContainerEntry(new Path(
-					"org.eclipse.pde.core.requiredPlugins")));
+			if (pdeAvailable) {
+				classpathEntries.add(JavaCore.newContainerEntry(new Path(
+						"org.eclipse.pde.core.requiredPlugins")));
+			}
 
 			javaProject.setRawClasspath(classpathEntries
 					.toArray(new IClasspathEntry[classpathEntries.size()]),

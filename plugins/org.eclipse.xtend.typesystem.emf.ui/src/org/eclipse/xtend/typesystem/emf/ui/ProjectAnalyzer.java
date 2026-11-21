@@ -154,9 +154,7 @@ final class ProjectAnalyzer extends Job {
           }
 
           root.open(monitor);
-          try {
-            final ZipFile zip = JDTUtil.openArchive(root);
-
+          try (final ZipFile zip = JDTUtil.openArchive(root)) {
             final Enumeration<? extends ZipEntry> entries = zip.entries();
             while (entries.hasMoreElements()) {
               final ZipEntry entry = entries.nextElement();
@@ -171,7 +169,7 @@ final class ProjectAnalyzer extends Job {
               }
             }
           }
-          catch (final CoreException e) {
+          catch (final CoreException | IOException e) {
             EmfToolsLog.logError(e);
           }
           finally {
