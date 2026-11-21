@@ -31,7 +31,8 @@ Plug-ins and features keep the IDs of Eclipse Xpand, so existing projects and se
 - Fix of `ConcurrentModificationException` in `XtendXpandProject.analyze(...)`, e.g. when changing metamodel contributors.
 - No internal Eclipse APIs are used anymore (JDT, search, preference pages).
 - Key binding Alt+Shift+T (refactoring quick menu) works in the Xpand editor.
-- The project wizard also works without PDE (e.g. "Eclipse IDE for Java Developers"). Projects are plug-in projects only if PDE is installed.
+- No project wizard (File > New > Xpand Project). Templates of JEAF Generator are maintained in Maven projects; the Xpand nature can be added in the project's context menu (Configure > Add Xpand Nature). Wizards for Xpand, Xtend and Check files are still available.
+- Context menus are contributed as commands (no deprecated action contributions anymore). No dependency on Guava.
 - Xpand resources in archives (e.g. templates in JAR files) don't keep the archive open, so archives aren't locked on Windows.
 - Default metamodel contributors for templates of JEAF Generator: "UML2 profiles" and "oAW-Classic Metamodel".
 - Features refer to the update site above, so Eclipse knows it for updates.

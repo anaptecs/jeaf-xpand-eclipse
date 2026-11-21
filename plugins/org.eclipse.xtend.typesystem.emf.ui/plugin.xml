@@ -14,27 +14,60 @@
             name="EMF Metamodels"/>
    </extension>
    <extension
-         point="org.eclipse.ui.popupMenus">
-      <objectContribution
-            objectClass="org.eclipse.core.resources.IFile"
-            nameFilter="*.ecore"
-            id="org.eclipse.xtend.ecoreContribution">
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.eclipse.xtend.typesystem.emf.ui.addOperationDelegation"
+            name="%action.add.EOperation..delegation.label">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.xtend.typesystem.emf.ui.actions.AddAnnotationsHandler"
+            commandId="org.eclipse.xtend.typesystem.emf.ui.addOperationDelegation">
+         <!-- Only for one Ecore model at a time -->
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <count
+                     value="1">
+               </count>
+            </with>
+         </enabledWhen>
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <!-- Context menu of Ecore models -->
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
          <menu
-               label="%menu.label"
-               path="additions"
-               id="org.eclipse.xtend.ui.menu">
-            <separator
-                  name="group1">
-            </separator>
+               id="org.eclipse.xtend.ui.menu"
+               label="%menu.label">
+            <command
+                  commandId="org.eclipse.xtend.typesystem.emf.ui.addOperationDelegation"
+                  label="%action.add.EOperation..delegation.label"
+                  style="push">
+            </command>
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <adapt
+                           type="org.eclipse.core.resources.IFile">
+                        <test
+                              property="org.eclipse.core.resources.extension"
+                              value="ecore">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
          </menu>
-         <action
-               label="%action.add.EOperation..delegation.label"
-               class="org.eclipse.xtend.typesystem.emf.ui.actions.AddAnnotationsAction"
-               menubarPath="org.eclipse.xtend.ui.menu/group1"
-               enablesFor="1"
-               id="org.eclipse.xtend.typesystem.emf.ui.addOperationLogic">
-         </action>
-      </objectContribution>
+      </menuContribution>
    </extension>
 
 </plugin>

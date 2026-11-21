@@ -26,7 +26,7 @@
 				<version>${tycho.version}</version>
 				<configuration>
 					<dependency-resolution>
-						<!-- Test runtime: Eclipse IDE incl. JDT and the editors, without PDE (tests the project wizard without PDE) -->
+						<!-- Test runtime: Eclipse IDE incl. JDT and the editors -->
 						<extraRequirements>
 							<requirement>
 								<type>eclipse-feature</type>

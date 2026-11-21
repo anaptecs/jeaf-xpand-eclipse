@@ -99,49 +99,7 @@
 	       <description>%templateWizard.description</description>
 		   <selection class="org.eclipse.core.resources.IResource"/>
 		</wizard>
-		<wizard
-        category="org.eclipse.xpand.ui.newWizards"
-        class="org.eclipse.xtend.shared.ui.wizards.XtendXpandProjectWizard"
-        icon="icons/genproject.gif"
-        id="org.eclipse.xpand.ui.wizard.NewXpandProjectWizard"
-        name="%projectWizard.name"
-        project="true">
-           <description>%projectWizard.description</description>
-           <selection class="org.eclipse.core.resources.IResource"/>
-        </wizard>
 	</extension>
-  <extension
-        point="org.eclipse.ui.actionSets">
-     <actionSet
-           description="%refactoring.actionSet.description"
-           id="org.eclipse.xpand.ui.refactoring.CodingActionSet"
-           label="%refactoring.actionSet.label"
-           visible="false">
-        <!--<menu
-              id="org.eclipse.xpand.ui.refactoring.menu"
-              label="%refactoring.menu.label"
-              path="edit">
-           <separator
-                 name="codingGroup">
-           </separator>
-        </menu>-->
-        <!--
-		<action
-			definitionId="org.eclipse.xtend.xpand2.extract.define"
-			label="Extract Define..."
-			retarget="true"
-			menubarPath="org.eclipse.xtend.xpand2.refactoring.menu/codingGroup"
-			id="org.eclipse.xtend.xpand2.actions.ExtractDefine">
-		</action>
-		-->
-		<action
-			definitionId="org.eclipse.xpand.ui.refactoring.rename.define"
-			label="%refactoring.rename.define.action.label"
-			retarget="true"
-			id="org.eclipse.xpand.ui.actions.RenameDefine">
-		</action>
-     </actionSet>
-  </extension>
   <extension
         point="org.eclipse.ui.commands">
       <category

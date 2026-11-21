@@ -13,6 +13,7 @@ package org.eclipse.xtend.check.ui.core.internal;
 
 import java.util.Set;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.internal.xtend.xtend.XtendFile;
 import org.eclipse.xtend.check.ui.core.internal.builder.CheckResourceParser;
@@ -25,10 +26,13 @@ public class CheckResourceImpl extends AbstractResource {
 
 	private final CheckResourceParser parser;
 
-	public CheckResourceImpl(final XtendFile res, final IStorage source,
+	private final IProject project;
+
+	public CheckResourceImpl(final XtendFile res, final IProject project, final IStorage source,
 			final CheckResourceParser parser) {
 		super(source);
 		setExtXptResource(res);
+		this.project = project;
 		this.parser = parser;
 	}
 
@@ -52,7 +56,7 @@ public class CheckResourceImpl extends AbstractResource {
 
 	@Override
 	public boolean internalRefresh() {
-		Resource o = parser.parse(getUnderlyingStorage(),
+		Resource o = parser.parse(project, getUnderlyingStorage(),
 				getFullyQualifiedName());
 		if (o == null)
 			return false;

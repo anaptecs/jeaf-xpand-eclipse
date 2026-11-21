@@ -57,7 +57,7 @@ public class XpandResourceParser extends ResourceContributorBase {
 	@Override
 	protected IXtendXpandResource createExtXptResource(final Resource resource,
 			final IProject project, final IStorage source) {
-		return new XpandResourceImpl((Template) resource, source, this);
+		return new XpandResourceImpl((Template) resource, project, source, this);
 	}
 
 	@Override

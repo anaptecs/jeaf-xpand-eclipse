@@ -14,6 +14,7 @@ package org.eclipse.xtend.shared.ui.core.builder;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.zip.ZipEntry;
@@ -62,8 +64,6 @@ import org.eclipse.xtend.shared.ui.core.internal.ResourceID;
 import org.eclipse.xtend.shared.ui.core.preferences.PreferenceConstants;
 import org.eclipse.xtend.shared.ui.internal.XtendLog;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Splitter;
 
 /**
  * Xpand Project Builder. Traverses the project and searches for Xpand related
@@ -155,10 +155,8 @@ public class XtendXpandBuilder extends IncrementalProjectBuilder {
 					new ProjectScope(project), Activator.getId());
 			store.setSearchContexts(new IScopeContext[] {
 					new ProjectScope(project), InstanceScope.INSTANCE });
-			Splitter splitter = Splitter.on(",").omitEmptyStrings()
-					.trimResults();
-			Iterable<String> exclusionPaths = splitter.split(store
-					.getString(PreferenceConstants.BUILDER_EXCLUSIONS));
+			String[] exclusionPaths = Arrays.stream(store.getString(PreferenceConstants.BUILDER_EXCLUSIONS).split(","))
+					.map(String::trim).filter(path -> !path.isEmpty()).toArray(String[]::new);
 			for (String s : exclusionPaths) {
 				String path = project.getFullPath() + "/" + s;
 				path = path.replace(".", "\\.");
@@ -172,7 +170,8 @@ public class XtendXpandBuilder extends IncrementalProjectBuilder {
 			}
 		}
 
-		public boolean apply(final String input) {
+		@Override
+		public boolean test(final String input) {
 			for (Pattern p : patterns) {
 				if (p.matcher(input).matches()) {
 					return false;
@@ -330,7 +329,7 @@ public class XtendXpandBuilder extends IncrementalProjectBuilder {
 			ResourceFilter filter = projectFilters.get(project);
 			IStorage storage = resource.getUnderlyingStorage();
 
-			if (!filter.apply(storage.getFullPath().toString())) {
+			if (!filter.test(storage.getFullPath().toString())) {
 				toRemove.add(resource);
 			}
 		}

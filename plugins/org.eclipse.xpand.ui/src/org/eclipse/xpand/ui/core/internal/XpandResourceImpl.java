@@ -14,6 +14,7 @@ package org.eclipse.xpand.ui.core.internal;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.internal.xpand2.model.XpandAdvice;
 import org.eclipse.internal.xpand2.model.XpandDefinition;
@@ -32,9 +33,13 @@ public class XpandResourceImpl extends AbstractResource implements IXpandResourc
 
 	private XpandResourceParser parser;
 
-	public XpandResourceImpl(final XpandResource tpl, final IStorage source, XpandResourceParser parser) {
+	private final IProject project;
+
+	public XpandResourceImpl(final XpandResource tpl, final IProject project, final IStorage source,
+			XpandResourceParser parser) {
 		super(source);
 		setExtXptResource(tpl);
+		this.project = project;
 		this.parser = parser;
 	}
 
@@ -105,7 +110,7 @@ public class XpandResourceImpl extends AbstractResource implements IXpandResourc
 
 	@Override
 	public boolean internalRefresh() {
-		Resource r = parser.parse(getUnderlyingStorage(), getFullyQualifiedName());
+		Resource r = parser.parse(project, getUnderlyingStorage(), getFullyQualifiedName());
 		if (r == null)
 			return false;
 		setExtXptResource(r);
