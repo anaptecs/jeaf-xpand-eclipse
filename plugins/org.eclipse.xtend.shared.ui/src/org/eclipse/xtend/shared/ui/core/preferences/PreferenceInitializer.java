@@ -24,8 +24,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		
-		// make sure we can use EMF metamodels by default
-		store.setDefault(PreferenceConstants.METAMODELCONTRIBUTORS, "org.eclipse.xtend.typesystem.emf.ui.EmfMetamodelContributor");
+		// Defaults for templates of JEAF Generator: UML2 profiles and oAW-Classic metamodel
+		store.setDefault(PreferenceConstants.METAMODELCONTRIBUTORS,
+				"org.eclipse.xtend.typesystem.uml2.ui.Uml2MetamodelContributor,"
+						+ "org.eclipse.xtend.shared.ui.core.metamodel.jdt.oaw.OawClassicMetamodelContributor");
 	}
 
 }
