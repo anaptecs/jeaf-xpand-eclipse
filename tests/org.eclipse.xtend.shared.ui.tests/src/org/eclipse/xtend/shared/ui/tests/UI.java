@@ -16,6 +16,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 
 /**
  * Helpers to run test code in the UI thread and to find and use widgets.
@@ -108,5 +110,42 @@ public final class UI {
 	 */
 	public static void click(final Button button) {
 		button.notifyListeners(SWT.Selection, new Event());
+	}
+
+	/**
+	 * Fills a (context) menu as if it was opened by the user and returns the labels of its items.
+	 */
+	public static List<String> show(final Menu menu) {
+		menu.notifyListeners(SWT.Show, new Event());
+		List<String> labels = new ArrayList<>();
+		for (MenuItem item : menu.getItems()) {
+			labels.add(label(item));
+		}
+		return labels;
+	}
+
+	/**
+	 * Returns the item with the passed label (without mnemonics and accelerators) or null.
+	 */
+	public static MenuItem item(final Menu menu, final String label) {
+		for (MenuItem item : menu.getItems()) {
+			if (label.equals(label(item))) {
+				return item;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Clicks a menu item.
+	 */
+	public static void select(final MenuItem item) {
+		item.notifyListeners(SWT.Selection, new Event());
+	}
+
+	private static String label(final MenuItem item) {
+		String text = item.getText().replace("&", "");
+		int tab = text.indexOf('\t');
+		return tab >= 0 ? text.substring(0, tab) : text;
 	}
 }

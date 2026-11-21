@@ -19,10 +19,6 @@ public class Messages extends NLS {
 	public static String AbstractExtXptContentAssistProcessor_Prompt;
 	public static String AbstractHover_MultipleMarkers;
 	public static String Activator_AnalyzingProgress;
-	public static String EclipseHelper_OvewritePrompt;
-	public static String EclipseHelper_TaskTitle;
-	public static String EclipseHelper_Warning1;
-	public static String EclipseHelper_Warning2;
 	public static String EnableDisableBreakpointAction_Description;
 	public static String EnableDisableBreakpointAction_DisableAction;
 	public static String EnableDisableBreakpointAction_EnableAction;
@@ -52,16 +48,6 @@ public class Messages extends NLS {
 	public static String XtendXpandMarkerManager_Line;
 	public static String XtendXpandModelManager_AnalyzingPrompt;
 	public static String XtendXpandProblemHover_MultipleMarkers;
-	public static String XtendXpandProjectWizard_ErrorLabel;
-	public static String XtendXpandProjectWizard_ProjectCreationMessage;
-	public static String XtendXpandProjectWizardPage_DefaultFileName;
-	public static String XtendXpandProjectWizardPage_Description;
-	public static String XtendXpandProjectWizardPage_ProjectName_Error;
-	public static String XtendXpandProjectWizardPage_NoMMSelected_Error;
-	public static String XtendXpandProjectWizardPage_Name;
-	public static String XtendXpandProjectWizardPage_ProjectLabel;
-	public static String XtendXpandProjectWizardPage_SampleLabel;
-	public static String XtendXpandProjectWizardPage_Title;
 	public static String XtendXpandSearchQuery_Label;
 	static {
 		// initialize resource bundle

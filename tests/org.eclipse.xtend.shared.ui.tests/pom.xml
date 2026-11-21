@@ -50,7 +50,12 @@
 							</requirement>
 							<requirement>
 								<type>eclipse-plugin</type>
-								<id>org.eclipse.pde.core</id>
+								<id>org.eclipse.xtend.check.ui</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>org.eclipse.xtend.typesystem.emf.ui</id>
 								<versionRange>0.0.0</versionRange>
 							</requirement>
 						</extraRequirements>

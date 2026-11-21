@@ -20,7 +20,7 @@ import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 
-public class AddAnnotationsAction extends AbstractCoreModelTransformerAction {
+public class AddAnnotationsHandler extends AbstractCoreModelTransformerHandler {
 
 	@Override
     public void transform(final Resource r) {

@@ -39,7 +39,7 @@ public class CheckResourceParser extends ResourceContributorBase {
 	protected IXtendXpandResource createExtXptResource(final Resource resource,
 			final IProject project, final IStorage source) {
 		CheckResourceImpl result = null;
-		result = new CheckResourceImpl((XtendFile) resource, source, this);
+		result = new CheckResourceImpl((XtendFile) resource, project, source, this);
 		return result;
 	}
 

@@ -7,8 +7,11 @@
  *******************************************************************************/
 package org.eclipse.xtend.shared.ui.core.internal.preferences;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
@@ -22,9 +25,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.xtend.shared.ui.core.preferences.PreferenceConstants;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
 
 /**
  * @author thoms - Initial contribution and API
@@ -90,9 +90,8 @@ public class BuilderPreferencePage extends AbstractPreferencePage {
 				PreferenceConstants.INCREMENTAL_ANALYZER_STRATEGY,
 				incrementalAnalysisCombo.getSelectionIndex());
 		// builder exclusion paths
-		Joiner joiner = Joiner.on(",").skipNulls();
-		String exclusionPaths = joiner.join(exclusionPathsComposite.getList()
-				.getItems());
+		String exclusionPaths = Arrays.stream(exclusionPathsComposite.getList().getItems())
+				.filter(Objects::nonNull).collect(Collectors.joining(","));
 		preferenceStore.setValue(PreferenceConstants.BUILDER_EXCLUSIONS,
 				exclusionPaths);
 
@@ -117,11 +116,9 @@ public class BuilderPreferencePage extends AbstractPreferencePage {
 		IPreferenceStore preferenceStore = getPreferenceStore();
 		incrementalAnalysisCombo.select(preferenceStore
 				.getInt(PreferenceConstants.INCREMENTAL_ANALYZER_STRATEGY));
-		Splitter splitter = Splitter.on(",").omitEmptyStrings().trimResults();
-		Iterable<String> exclusionPaths = splitter.split(preferenceStore
-				.getString(PreferenceConstants.BUILDER_EXCLUSIONS));
-		exclusionPathsComposite.getList().setItems(
-				Iterables.toArray(exclusionPaths, String.class));
+		String[] exclusionPaths = Arrays.stream(preferenceStore.getString(PreferenceConstants.BUILDER_EXCLUSIONS).split(","))
+				.map(String::trim).filter(path -> !path.isEmpty()).toArray(String[]::new);
+		exclusionPathsComposite.getList().setItems(exclusionPaths);
 	}
 
 	@Override
