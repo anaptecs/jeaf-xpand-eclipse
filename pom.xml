@@ -4,7 +4,7 @@
 
 	<groupId>com.anaptecs.jeaf.xpand.eclipse</groupId>
 	<artifactId>jeaf-xpand-eclipse-project</artifactId>
-	<version>2.3.3-SNAPSHOT</version>
+	<version>2.3.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>JEAF Xpand Eclipse Project</name>
 	<description>Eclipse editors for Xpand, Xtend and Check, based on Eclipse Xpand 2.2.0.</description>
