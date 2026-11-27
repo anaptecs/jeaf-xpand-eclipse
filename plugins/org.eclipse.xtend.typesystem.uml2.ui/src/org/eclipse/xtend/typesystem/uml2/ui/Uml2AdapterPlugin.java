@@ -104,6 +104,16 @@ public class Uml2AdapterPlugin extends AbstractUIPlugin {
 
 		private final Map<IResource, Profile> fileModels;
 
+		/**
+		 * A profile was loaded by the last visit of a resource.
+		 */
+		private boolean loaded;
+
+		/**
+		 * A profile was added, changed or removed (only by changes, not by the initial loading).
+		 */
+		private boolean profilesChanged;
+
 		public ProfileResourceDeltaVisitor(ResourceSet profilesResourceSet, Map<IResource, Profile> fileModels) {
 			super();
 			this.profilesResourceSet = profilesResourceSet;
@@ -113,12 +123,23 @@ public class Uml2AdapterPlugin extends AbstractUIPlugin {
         public boolean visit(IResourceDelta delta) {
 
             if (delta.getKind() == IResourceDelta.REMOVED) {
+                if (fileModels.containsKey(delta.getResource())) {
+                    profilesChanged = true;
+                }
                 Uml2AdapterPlugin.removeFileModel(delta.getResource());
                 return true;
             } else {
                 IResource resource = delta.getResource();
                 try {
-                    return visit(resource);
+                    loaded = false;
+                    boolean result = visit(resource);
+                    // Only for a new content, not e.g. for changed markers.
+                    boolean contentChanged = delta.getKind() == IResourceDelta.ADDED
+                            || (delta.getFlags() & (IResourceDelta.CONTENT | IResourceDelta.REPLACED)) != 0;
+                    if (loaded && contentChanged) {
+                        profilesChanged = true;
+                    }
+                    return result;
                 } catch (CoreException e) {
                     Uml2AdapterLog.logError(e);
                     return true;
@@ -136,6 +157,7 @@ public class Uml2AdapterPlugin extends AbstractUIPlugin {
                             Profile p = loadProfile(uri);
                             if (p != null) {
                                 fileModels.put(f, p);
+                                loaded = true;
                             }
                             // notify listeners
                             final List<UmlPluginListener> pluginListener = Uml2AdapterPlugin.getDefault().pluginListener;
@@ -228,7 +250,12 @@ public class Uml2AdapterPlugin extends AbstractUIPlugin {
             IResourceDelta rootDelta = event.getDelta();
             try {
             	if (!initializingResources.get()) {
-            		rootDelta.accept(new Uml2AdapterPlugin.ProfileResourceDeltaVisitor(getProfilesResourceSet(), getFileModelsInternal()));
+            		ProfileResourceDeltaVisitor visitor = new Uml2AdapterPlugin.ProfileResourceDeltaVisitor(getProfilesResourceSet(), getFileModelsInternal());
+            		rootDelta.accept(visitor);
+            		// Analyzed extension files may keep types of the old profile (issue #13).
+            		if (visitor.profilesChanged) {
+            			ProfileChangeBuild.request();
+            		}
             	}
             } catch (CoreException e) {
                 Uml2AdapterLog.logError(e);

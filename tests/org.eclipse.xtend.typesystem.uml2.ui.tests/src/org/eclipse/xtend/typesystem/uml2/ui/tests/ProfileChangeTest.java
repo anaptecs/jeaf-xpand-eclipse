@@ -156,6 +156,15 @@ public class ProfileChangeTest {
 		return ((AbstractResource) xtendProject.findXtendXpandResource(file)).getExtXptResource();
 	}
 
+	private static boolean profileJobPending() {
+		for (Job job : Job.getJobManager().find(null)) {
+			if (job.getName().contains("UML profile") && job.getState() != Job.NONE) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private IFile create(final String path, final String content) throws CoreException {
 		IFile file = project.getFile(path);
 		file.create(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)), true, null);
@@ -172,9 +181,13 @@ public class ProfileChangeTest {
 		return errors;
 	}
 
+	/**
+	 * Waits until all jobs are done, also delayed ones of the UML2 type system (a sleeping job doesn't keep the job
+	 * manager from being idle).
+	 */
 	private static void waitForJobs() {
 		long end = System.currentTimeMillis() + 60_000;
-		while (!Job.getJobManager().isIdle() && System.currentTimeMillis() < end) {
+		while ((!Job.getJobManager().isIdle() || profileJobPending()) && System.currentTimeMillis() < end) {
 			try {
 				Thread.sleep(100);
 			}
