@@ -43,7 +43,7 @@ public class XpandPartitionScanner extends RuleBasedPartitionScanner {
 		rules.add(new MultiLineRule(XpandTokens.LT + XpandTokens.REM,
 				XpandTokens.ENDREM + XpandTokens.RT, comment, (char) 0, true) {
 			/**
-			 * Must detect ENDREM-»
+			 * Must detect ENDREM-Â»
 			 */
 			@Override
 			protected boolean sequenceDetected(final ICharacterScanner scanner,

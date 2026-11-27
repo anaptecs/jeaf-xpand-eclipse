@@ -12,7 +12,7 @@ import org.eclipse.ui.IStartup;
 import org.eclipse.xtend.typesystem.emf.check.CheckRegistry;
 
 /**
- * @author Dennis Hübner - Initial contribution and API
+ * @author Dennis HÃ¼bner - Initial contribution and API
  * 
  */
 public class EarlyStarter implements IStartup {
