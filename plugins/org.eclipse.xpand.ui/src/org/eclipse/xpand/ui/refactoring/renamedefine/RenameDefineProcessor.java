@@ -42,7 +42,7 @@ import org.eclipse.xtend.shared.ui.core.search.XtendXpandSearchEngine;
  * refactorings.
  * 
  * @author Peter Friese
- * @author Dennis Hübner
+ * @author Dennis HÃ¼bner
  */
 public class RenameDefineProcessor extends RefactoringProcessor {
 
