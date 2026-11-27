@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Xpand UML2 Type System UI Tests
 Bundle-SymbolicName: org.eclipse.xtend.typesystem.uml2.ui.tests
-Bundle-Version: 2.3.3.qualifier
+Bundle-Version: 2.3.4.qualifier
 Bundle-Vendor: anaptecs GmbH
 Fragment-Host: org.eclipse.xtend.typesystem.uml2.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-17
